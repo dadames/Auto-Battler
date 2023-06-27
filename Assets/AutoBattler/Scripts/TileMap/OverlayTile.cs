@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace AutoBattler
 {
@@ -8,13 +9,31 @@ namespace AutoBattler
     public class OverlayTile : MonoBehaviour
     {
         private Vector2Int _gridLocation;
-        public Vector2Int GridLocation { get => _gridLocation; }
+        public Vector2Int GridLocation => _gridLocation;
+        [SerializeField] private TextMeshProUGUI _gridLocationText;
         private TileData _data;
-        public TileData Data { get => _data; }
+        public TileData Data => _data;
+
+
+        private void OnEnable()
+        {
+            EventManager.AddListener("DebugMapCoords", _OnDebugMapCoords);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.RemoveListener("DebugMapCoords", _OnDebugMapCoords);
+        }
 
         private void Awake()
         {
             HideTile();
+        }
+
+        private void Start()
+        {
+            _gridLocationText.text = _gridLocation.ToString();
+            _gridLocationText.enabled = false;
         }
 
         public void ShowTile()
@@ -25,6 +44,26 @@ namespace AutoBattler
         public void HideTile()
         {
             gameObject.GetComponent<Renderer>().enabled = false;
+        }
+
+        public void SetData(TileData data)
+        {
+            _data = data;
+        }
+
+        public void SetGridLocation(Vector2Int gridLocation)
+        {
+            _gridLocation = gridLocation;
+        }
+
+        private void _OnDebugMapCoords()
+        {
+            _gridLocationText.enabled = !_gridLocationText.enabled;
+        }
+
+        private void OnDestroy()
+        {
+            Debug.Log("Destroying tile");
         }
     }
 }
