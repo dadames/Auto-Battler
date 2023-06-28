@@ -8,6 +8,7 @@ namespace AutoBattler
     {
         Normal,
         Buildable,
+        Blocking,
     }
 
     [CreateAssetMenu(fileName = "TileData", menuName = "Scriptable Objects/TileData", order = 3)]

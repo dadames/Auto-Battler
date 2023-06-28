@@ -15,6 +15,10 @@ namespace AutoBattler
         public TileData Data => _data;
         private UnitManager _occupyingUnit;
         public UnitManager OccupyingUnit => _occupyingUnit;
+        public bool IsBlocked
+        {
+            get { return _data.TileType == TileType.Blocking || _occupyingUnit != null; }
+        }
 
 
         private void OnEnable()
@@ -66,7 +70,11 @@ namespace AutoBattler
         public void MoveUnitToTile(UnitManager unit)
         {
             _occupyingUnit = unit;
-            unit.SetParentTile(this);
+        }
+
+        public void ClearTile()
+        {
+            _occupyingUnit = null;
         }
 
         private void OnDestroy()

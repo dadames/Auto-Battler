@@ -62,21 +62,21 @@ namespace AutoBattler
         }
 
 
-        public Vector3 TileToWorldSpace(Vector2Int pos)
+        public Vector3 TileToWorldSpace(Vector2Int position)
         {
-            return TileToWorldSpace((Vector3Int)pos);
+            return TileToWorldSpace((Vector3Int)position);
         }
 
-        public Vector3 TileToWorldSpace(Vector3Int pos)
+        public Vector3 TileToWorldSpace(Vector3Int position)
         {
-            Vector3 vec = this._tileMap.GetCellCenterWorld(pos);
-            vec += ((pos.x + pos.y)) * Vector3.forward;
+            Vector3 vec = this._tileMap.GetCellCenterWorld(position);
+            vec += ((position.x + position.y)) * Vector3.forward;
             return vec;
         }
 
-        public TileData GetTileData(Vector3Int pos)
+        public TileData GetTileData(Vector3Int position)
         {
-            TileBase tileBase = _tileMap.GetTile(pos);
+            TileBase tileBase = _tileMap.GetTile(position);
 
             if (!_tileDataDict.ContainsKey(tileBase))
             {
@@ -88,9 +88,14 @@ namespace AutoBattler
             }
         }
 
-        public OverlayTile GetTileAtPos(Vector2Int pos)
+        public OverlayTile GetTileAtPosition(Vector2Int position)
         {
-            return _map[pos];
+            OverlayTile tileToReturn;
+
+            tileToReturn = _map[position];
+            if (tileToReturn == null) { Debug.LogError("Referencing point off map."); }
+
+            return tileToReturn;
         }
     }
 }

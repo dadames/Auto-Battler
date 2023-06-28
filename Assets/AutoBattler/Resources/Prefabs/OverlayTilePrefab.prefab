@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6912546529964176874}
   - component: {fileID: 5974053363157232446}
-  - component: {fileID: 3154009159088267124}
   - component: {fileID: 4450123688461005358}
+  - component: {fileID: 2606982259520891877}
   m_Layer: 0
   m_Name: OverlayTilePrefab
   m_TagString: Untagged
@@ -87,19 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3154009159088267124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4117918862832183265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 188f00a08f445f042a6a6cc508fb4bf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gridLocationText: {fileID: 338368755069653995}
 --- !u!61 &4450123688461005358
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -145,6 +132,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2606982259520891877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4117918862832183265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 188f00a08f445f042a6a6cc508fb4bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gridLocationText: {fileID: 338368755069653995}
 --- !u!1 &5578687333768268487
 GameObject:
   m_ObjectHideFlags: 0

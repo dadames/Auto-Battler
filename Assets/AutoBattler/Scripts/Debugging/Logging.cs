@@ -23,8 +23,6 @@ namespace AutoBattler
                 Directory.CreateDirectory(Globals.GetLogFolderPath());
             File.Create(Path.Combine(Globals.GetLogFolderPath(), "GameSetup.txt"));
             File.Create(Path.Combine(Globals.GetLogFolderPath(), "UnitSpawn.txt"));
-            File.Create(Path.Combine(Globals.GetLogFolderPath(), "Inventory.txt"));
-            File.Create(Path.Combine(Globals.GetLogFolderPath(), "ItemGeneration.txt"));
             File.Create(Path.Combine(Globals.GetLogFolderPath(), "Serialization.txt"));
             File.Create(Path.Combine(Globals.GetLogFolderPath(), "AI.txt"));
             File.Create(Path.Combine(Globals.GetLogFolderPath(), "Unknown.txt"));

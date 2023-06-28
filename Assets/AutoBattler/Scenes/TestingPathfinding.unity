@@ -2062,7 +2062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c5efa9f16b18344888b4af11fc4ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _overlayTilePrefab: {fileID: 3154009159088267124, guid: 7b6d0f3f430cd75468ccd3be0b4abba7, type: 3}
+  _overlayTilePrefab: {fileID: 2606982259520891877, guid: 7b6d0f3f430cd75468ccd3be0b4abba7, type: 3}
   _tileParent: {fileID: 1412605495}
   _tileMap: {fileID: 729060585}
 --- !u!1 &1412605495
@@ -2268,3 +2268,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d5827163686ba64599bc49b897304ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1865001853
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1865001855}
+  - component: {fileID: 1865001854}
+  m_Layer: 0
+  m_Name: Logging
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1865001854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865001853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265b0c81b33bae94b92fee39aae431e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1865001855
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865001853}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.6431162, y: -0.9872332, z: 0.0676716}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

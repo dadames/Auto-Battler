@@ -6,33 +6,31 @@ namespace AutoBattler
 {
     public class Unit
     {
-        private int _speed;
         private Transform _transform;
         private UnitManager _unitManager;
-        
+
+
+        private OverlayTile _parentTile;
+        public OverlayTile ParentTile => _parentTile;
+        private int _speed;
+
 
         public Unit(UnitData data, Vector2Int position)
         {
             GameObject g = GameObject.Instantiate(data.Prefab);
             _transform = g.transform;
+            _transform.name = $"{data.UnitId}";
             _unitManager = g.transform.GetComponent<UnitManager>();
             _speed = data.Speed;
-            SetPosition(position);
+            _parentTile = MapManager.Instance.GetTileAtPosition(position);
+
+            _unitManager.Initialize(this, position);
         }
 
-        public void SetPosition(Vector2Int position)
+        public void SetParentTile(OverlayTile tile)
         {
-            var placedOnTile = MapManager.Instance.GetTileAtPos(position);
-
-            if (placedOnTile == null)
-            {
-                Debug.LogError("Dice spawning off map.");
-                return;
-            }
-
-            OverlayTile overlayTile= placedOnTile.gameObject.GetComponent<OverlayTile>();
-            overlayTile.MoveUnitToTile(_unitManager);
-            _transform.position = MapManager.Instance.TileToWorldSpace(placedOnTile.GridLocation);
+            _parentTile = tile;
+            if (_parentTile == null) Debug.LogError($"{_transform.name} has no parent tile.");
         }
     }
 }
