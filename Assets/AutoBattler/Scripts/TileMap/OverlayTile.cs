@@ -13,6 +13,8 @@ namespace AutoBattler
         [SerializeField] private TextMeshProUGUI _gridLocationText;
         private TileData _data;
         public TileData Data => _data;
+        private UnitManager _occupyingUnit;
+        public UnitManager OccupyingUnit => _occupyingUnit;
 
 
         private void OnEnable()
@@ -61,9 +63,15 @@ namespace AutoBattler
             _gridLocationText.enabled = !_gridLocationText.enabled;
         }
 
+        public void MoveUnitToTile(UnitManager unit)
+        {
+            _occupyingUnit = unit;
+            unit.SetParentTile(this);
+        }
+
         private void OnDestroy()
         {
-            Debug.Log("Destroying tile");
+            Logging.LogNotification($"Tile {_gridLocation} despawned.", LogType.GAME_SETUP);
         }
     }
 }

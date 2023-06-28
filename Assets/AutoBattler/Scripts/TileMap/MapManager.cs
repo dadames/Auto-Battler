@@ -29,11 +29,6 @@ namespace AutoBattler
                     _tileDataDict.Add(tile, data);
         }
 
-        private void Start()
-        {
-            GenerateMap(); 
-        }
-
         public void GenerateMap()
         {
             BoundsInt bounds = _tileMap.cellBounds;
@@ -91,6 +86,11 @@ namespace AutoBattler
             {
                 return _tileDataDict[tileBase];
             }
+        }
+
+        public OverlayTile GetTileAtPos(Vector2Int pos)
+        {
+            return _map[pos];
         }
     }
 }

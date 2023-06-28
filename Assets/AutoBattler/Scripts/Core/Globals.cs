@@ -4,6 +4,13 @@ namespace AutoBattler
 {
     public static class Globals
     {
+        #region GAME ---------------------------------
+
+        public static UnitData[] UNIT_DATA;
+
+        #endregion
+
+
         #region DEBUGGING ---------------------------------
 
         public static bool DEBUG_GAME_SETUP;
@@ -18,10 +25,7 @@ namespace AutoBattler
 
         #region FOLDERS ---------------------------------
 
-        public static string ITEM_FOLDER = "ScriptableObjects/Items";
-        public static string MODIFIER_DATA_FOLDER = "ScriptableObjects/Modifiers";
-        public static string ENTITY_FOLDER = "ScriptableObjects/Entities";
-        public static string PLAYER_FOLDER = "ScriptableObjects/Entities/Player";
+        public static string UNIT_DATA_FOLDER = "ScriptableObjects/UnitData";
 
 
 #if UNITY_EDITOR
@@ -42,7 +46,7 @@ namespace AutoBattler
     public static string GetLogFolderPath()
         => System.IO.Path.Combine(
             "idbfs",
-            "BlockPaperScissorsANDupwq3wg0zw4czbq",
+            "AutoBattler",
             Globals.DATA_DIRECTORY,
             "Logs");
 #else
