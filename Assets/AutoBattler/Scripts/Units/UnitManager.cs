@@ -13,6 +13,16 @@ namespace AutoBattler
         public List<int> path;
         private int _destinationTile;
 
+        private void OnEnable()
+        {
+            EventManager.AddListener("UpdatePathfinding", _OnUpdatePathfinding);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.RemoveListener("UpdatePathfinding", _OnUpdatePathfinding);
+        }
+
         public void Initialize(Unit unit, Vector2Int position)
         {
             _destinationTile = 50;
@@ -20,7 +30,7 @@ namespace AutoBattler
             _rigidBody = GetComponent<Rigidbody2D>();
             SetPosition(position);
             _initialized = true;
-            path = AStarSearch.Search(MapManager.Instance.AdjacencyMap, _unit.ParentTile, MapManager.Instance.IntToTile[_destinationTile]);
+            _OnUpdatePathfinding();
             foreach (int tile in path)
             {
                 MapManager.Instance.IntToTile[tile].HighlightTile();
@@ -32,6 +42,11 @@ namespace AutoBattler
             if (_initialized == false) return;
 
             _PathFinding();
+        }
+
+        private void _OnUpdatePathfinding()
+        {
+            path = AStarSearch.Search(MapManager.Instance.AdjacencyMap, _unit.ParentTile, MapManager.Instance.IntToTile[_destinationTile]);
         }
 
         private void _PathFinding()

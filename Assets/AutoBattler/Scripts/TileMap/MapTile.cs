@@ -39,12 +39,15 @@ namespace AutoBattler
 
         public void MoveUnitToTile(UnitManager unit)
         {
+            if (_isBlocker) Debug.LogError($"Unit moved to blocker tile {_id}");
             _occupyingUnit = unit;
+            EventManager.TriggerEvent("UpdatePathfinding");
         }
 
         public void ClearTile()
         {
             _occupyingUnit = null;
+            EventManager.TriggerEvent("UpdatePathfinding");
         }
 
         public void HighlightTile()
