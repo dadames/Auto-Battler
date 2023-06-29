@@ -33,7 +33,7 @@ namespace AutoBattler
             _OnUpdatePathfinding();
             foreach (int tile in path)
             {
-                MapManager.Instance.IntToTile[tile].HighlightTile();
+                MapManager.Instance.IdToMapTile[tile].HighlightTile();
             }
         }
 
@@ -46,14 +46,14 @@ namespace AutoBattler
 
         private void _OnUpdatePathfinding()
         {
-            path = AStarSearch.Search(MapManager.Instance.AdjacencyMap, _unit.ParentTile, MapManager.Instance.IntToTile[_destinationTile]);
+            path = AStarSearch.Search(MapManager.Instance.AdjacencyMap, _unit.ParentTile, MapManager.Instance.IdToMapTile[_destinationTile]);
         }
 
         private void _PathFinding()
         {
             _CheckIfReachedDestination();
 
-            Vector2 newPosition = Vector2.MoveTowards(transform.position, MapManager.Instance.IntToTile[path[0]].Position, Time.deltaTime * _unit.Speed* Globals.MOVEMENT_SPEED_SCALING);
+            Vector2 newPosition = Vector2.MoveTowards(transform.position, MapManager.Instance.IdToMapTile[path[0]].Position, Time.deltaTime * _unit.Speed* Globals.MOVEMENT_SPEED_SCALING);
             _rigidBody.MovePosition(newPosition);
             SetOccupiedTile();
         }

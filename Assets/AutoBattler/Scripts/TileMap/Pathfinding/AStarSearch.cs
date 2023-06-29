@@ -60,7 +60,7 @@ namespace AutoBattler
             {
                 output.Insert(0, path[currentPosition]);
                 currentPosition = path[currentPosition];
-                MapManager.Instance.IntToTile[currentPosition].HighlightTile();
+                MapManager.Instance.IdToMapTile[currentPosition].HighlightTile();
             }
 
             return output;

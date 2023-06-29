@@ -15,16 +15,13 @@ namespace AutoBattler
         [SerializeField] private GameObject _mapTilePrefab;
         [SerializeField] private GameObject _tileParent;
         [SerializeField] private Tilemap _tileMap;
-        public Tilemap TileMap => _tileMap;
 
-        private readonly Dictionary<TileBase, MapTileData> _tileToData = new();
+
+        private readonly Dictionary<TileBase, MapTileData> _tileBaseToData = new(); //Keeps track of base tiles used to draw the map and their respective data
         private readonly Dictionary<int, MapTile> _idToMapTile = new();
         public Dictionary<int, MapTile> IdToMapTile => _idToMapTile;
-        private readonly Dictionary<Vector2Int, MapTile> _map = new();
-        public Dictionary<Vector2Int, MapTile> Map => _map;
-        private readonly Dictionary<Vector2, MapTile> _positionToMapTile = new();
-        private readonly Dictionary<int, MapTile> _intToTile = new();
-        public Dictionary<int, MapTile> IntToTile => _intToTile;
+        private readonly Dictionary<Vector2, MapTile> _worldPositionToMapTile = new();
+        private readonly Dictionary<Vector2Int, MapTile> _gridLocationToMapTile = new();
         private readonly SquareGrid _adjacencyMap = new();
         public SquareGrid AdjacencyMap => _adjacencyMap;
 
@@ -35,13 +32,13 @@ namespace AutoBattler
 
             foreach (MapTileData data in Resources.LoadAll<MapTileData>(Globals.MAPTILE_DATA_FOLDER))
                 foreach (TileBase tile in data.Tiles)
-                    _tileToData.Add(tile, data);
+                    _tileBaseToData.Add(tile, data);
         }
 
         public void GenerateMap()
         {
             _CreateMapTiles();
-            _CreatePositionToMapTileDictionary();
+            _CreateReverseLookupDictionaries();
             _CreateAdjacencyMapDictionary();
         }
 
@@ -57,9 +54,8 @@ namespace AutoBattler
                     for (int x = bounds.min.x; x < bounds.max.x; x++)
                     {
                         Vector3Int gridLocation = new(x, y, z);
-                        Vector2Int tileKey = new(x, y);
 
-                        if (_tileMap.HasTile(gridLocation) && !_map.ContainsKey(tileKey))
+                        if (_tileMap.HasTile(gridLocation))
                         {
                             MapTileData data = GetMapTileDataFromPlacedTile(gridLocation);
                             Vector2 cellWorldPos = TileToWorldSpace(gridLocation);
@@ -67,8 +63,6 @@ namespace AutoBattler
                             MapTile mapTile = new(_mapTilePrefab, idIterator, _tileParent.transform, cellWorldPos, data, (Vector2Int)gridLocation);
 
                             _idToMapTile.Add(mapTile.Id, mapTile);
-                            _map.Add(tileKey, mapTile);
-                            _intToTile.Add(idIterator, mapTile);
                             idIterator++;                            
                         }
                     }
@@ -76,32 +70,33 @@ namespace AutoBattler
             }
         }
 
-        private void _CreatePositionToMapTileDictionary()
+        private void _CreateReverseLookupDictionaries()
         {
-            foreach (KeyValuePair<Vector2Int, MapTile> pair in _map)
+            foreach (KeyValuePair<int, MapTile> pair in IdToMapTile)
             {
-                _positionToMapTile.Add(pair.Value.Position, pair.Value);
+                _worldPositionToMapTile.Add(pair.Value.Position, pair.Value);
+                _gridLocationToMapTile.Add(pair.Value.GridLocation, pair.Value);
             }
         }
 
         private void _CreateAdjacencyMapDictionary()
         {
-            foreach (KeyValuePair<Vector2Int, MapTile> from in _map)
-                _adjacencyMap.Add(GetTileAtPosition(from.Key).Id, _GetAdjacencies(from.Key));
+            foreach (KeyValuePair<int, MapTile> from in IdToMapTile)
+                _adjacencyMap.Add(GetTileAtPosition(from.Value.GridLocation).Id, _GetAdjacencies(from.Value.GridLocation));
         }
 
         private Dictionary<int, int> _GetAdjacencies(Vector2Int from)
         {
             Dictionary<int, int> adjacencies = new();
             
-            if (_map.ContainsKey(from + new Vector2Int(0, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)).Id, GetTileAtPosition(from + new Vector2Int(0, -1)).Cost);
-            if (_map.ContainsKey(from + new Vector2Int(-1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)).Id, GetTileAtPosition(from + new Vector2Int(-1, 0)).Cost);
-            if (_map.ContainsKey(from + new Vector2Int(0, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, 1)).Id, GetTileAtPosition(from + new Vector2Int(0, 1)).Cost);
-            if (_map.ContainsKey(from + new Vector2Int(1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 0)).Id, GetTileAtPosition(from + new Vector2Int(1, 0)).Cost);
-            if (_map.ContainsKey(from + new Vector2Int(-1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)).Id, GetTileAtPosition(from + new Vector2Int(-1, -1)).Cost + 1);
-            if (_map.ContainsKey(from + new Vector2Int(1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 1)).Id, GetTileAtPosition(from + new Vector2Int(1, 1)).Cost + 1);
-            if (_map.ContainsKey(from + new Vector2Int(-1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 1)).Id, GetTileAtPosition(from + new Vector2Int(-1, 1)).Cost + 1);
-            if (_map.ContainsKey(from + new Vector2Int(1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, -1)).Id, GetTileAtPosition(from + new Vector2Int(1, -1)).Cost + 1);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(0, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)).Id, GetTileAtPosition(from + new Vector2Int(0, -1)).Cost);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)).Id, GetTileAtPosition(from + new Vector2Int(-1, 0)).Cost);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(0, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, 1)).Id, GetTileAtPosition(from + new Vector2Int(0, 1)).Cost);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 0)).Id, GetTileAtPosition(from + new Vector2Int(1, 0)).Cost);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)).Id, GetTileAtPosition(from + new Vector2Int(-1, -1)).Cost + 1);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 1)).Id, GetTileAtPosition(from + new Vector2Int(1, 1)).Cost + 1);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 1)).Id, GetTileAtPosition(from + new Vector2Int(-1, 1)).Cost + 1);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, -1)).Id, GetTileAtPosition(from + new Vector2Int(1, -1)).Cost + 1);
 
             return adjacencies;
         }
@@ -121,26 +116,26 @@ namespace AutoBattler
 
         public bool WorldSpaceIsMapTile(Vector2 position)
         {
-            return _positionToMapTile.ContainsKey(position);
+            return _worldPositionToMapTile.ContainsKey(position);
         }
 
         public MapTile WorldSpaceToTile(Vector2 position)
         {
-            return _positionToMapTile[position];
+            return _worldPositionToMapTile[position];
         }
 
         public MapTileData GetMapTileDataFromPlacedTile(Vector3Int position)
         {
             TileBase tileBase = _tileMap.GetTile(position);
 
-            if (!_tileToData.ContainsKey(tileBase))
+            if (!_tileBaseToData.ContainsKey(tileBase))
             {
                 Debug.LogError("Referencing null key.");
                 return null;
             }
             else
             {
-                return _tileToData[tileBase];
+                return _tileBaseToData[tileBase];
             }
         }
 
@@ -148,7 +143,7 @@ namespace AutoBattler
         {
             MapTile tileToReturn;
 
-            tileToReturn = _map[position];
+            tileToReturn = _gridLocationToMapTile[position];
             if (tileToReturn == null) { Debug.LogError("Referencing point off map."); }
 
             return tileToReturn;
