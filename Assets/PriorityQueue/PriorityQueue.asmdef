@@ -1,11 +1,7 @@
 {
-    "name": "AutoBattler",
-    "rootNamespace": "AutoBattler",
-    "references": [
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:e2f98eacfeb3d5c44829464ad6d923fe",
-        "GUID:d8b63aba1907145bea998dd612889d6b"
-    ],
+    "name": "PriorityQueue",
+    "rootNamespace": "Priority_Queue",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -2062,7 +2062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c5efa9f16b18344888b4af11fc4ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _overlayTilePrefab: {fileID: 2606982259520891877, guid: 7b6d0f3f430cd75468ccd3be0b4abba7, type: 3}
+  _mapTilePrefab: {fileID: 4117918862832183265, guid: 7b6d0f3f430cd75468ccd3be0b4abba7, type: 3}
   _tileParent: {fileID: 1412605495}
   _tileMap: {fileID: 729060585}
 --- !u!1 &1412605495

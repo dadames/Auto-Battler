@@ -39,6 +39,10 @@ namespace AutoBattler
             {
                 EventManager.TriggerEvent("DebugMapCoords");
             });
+            new DebugCommand("debugmapids", "Shows ID's for each tile.", "debugmapids", () =>
+            {
+                EventManager.TriggerEvent("DebugMapIds");
+            });
         }
 
         private void Update()

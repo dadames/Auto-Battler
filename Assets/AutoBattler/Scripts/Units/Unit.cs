@@ -9,10 +9,10 @@ namespace AutoBattler
         private Transform _transform;
         private UnitManager _unitManager;
 
-
-        private OverlayTile _parentTile;
-        public OverlayTile ParentTile => _parentTile;
+        private MapTile _parentTile;
+        public MapTile ParentTile => _parentTile;
         private int _speed;
+        public int Speed => _speed;
 
 
         public Unit(UnitData data, Vector2Int position)
@@ -27,7 +27,7 @@ namespace AutoBattler
             _unitManager.Initialize(this, position);
         }
 
-        public void SetParentTile(OverlayTile tile)
+        public void SetParentTile(MapTile tile)
         {
             _parentTile = tile;
             if (_parentTile == null) Debug.LogError($"{_transform.name} has no parent tile.");

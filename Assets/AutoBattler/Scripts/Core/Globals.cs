@@ -7,6 +7,7 @@ namespace AutoBattler
         #region GAME ---------------------------------
 
         public static UnitData[] UNIT_DATA;
+        public static float MOVEMENT_SPEED_SCALING = 0.05f;
 
         #endregion
 
@@ -26,6 +27,7 @@ namespace AutoBattler
         #region FOLDERS ---------------------------------
 
         public static string UNIT_DATA_FOLDER = "ScriptableObjects/UnitData";
+        public static string MAPTILE_DATA_FOLDER = "ScriptableObjects/MapTileData";
 
 
 #if UNITY_EDITOR

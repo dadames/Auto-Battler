@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,9 +10,7 @@ namespace AutoBattler
         private Rigidbody2D _rigidBody;
 
         private bool _initialized = false;
-        private OverlayTile _parentTile;
-        public OverlayTile ParentTile => _parentTile;
-
+        public Dictionary<int, int> path;
 
         public void Initialize(Unit unit, Vector2Int position)
         {
@@ -21,43 +18,51 @@ namespace AutoBattler
             _rigidBody = GetComponent<Rigidbody2D>();
             SetPosition(position);
             _initialized = true;
-        }
-
-        private void Update()
-        {
-            if (_initialized == false) return;
-            SetOccupiedTile();
+            path = AStarSearch.Search(MapManager.Instance.AdjacencyMap, _unit.ParentTile, MapManager.Instance.IntToTile[20]);
+            foreach (KeyValuePair<int, int> pair in path)
+            {
+                Debug.Log($"{pair.Key}, {pair.Value}");
+            }
         }
 
         private void FixedUpdate()
         {
             if (_initialized == false) return;
-            _rigidBody.MovePosition(_rigidBody.position + new Vector2(0.01f, 0));
+
+            if (_unit.ParentTile.Id == path[0])
+            {
+                Debug.Log($"Reached {path[0]} moving to {path[1]}");
+                path.Remove(0);                
+            }
+
+            Vector2 newPosition = Vector2.MoveTowards(transform.position, MapManager.Instance.IntToTile[path[0]].Position, Time.deltaTime * _unit.Speed);
+            _rigidBody.MovePosition(newPosition);
+            SetOccupiedTile();
         }
 
         public void SetPosition(Vector2Int position)
         {
-            OverlayTile placedOnTile = MapManager.Instance.GetTileAtPosition(position);
+            MapTile placedOnTile = MapManager.Instance.GetTileAtPosition(position);
 
             transform.position = MapManager.Instance.TileToWorldSpace(placedOnTile.GridLocation);
         }
 
         public void SetOccupiedTile()
         {
-            OverlayTile placedOnTile = GetTileAtPosition();
+            MapTile placedOnTile = GetTileAtPosition();
 
             if (placedOnTile != _unit.ParentTile)
             {
-                OverlayTile formerTile = _unit.ParentTile;
+                MapTile formerTile = _unit.ParentTile;
                 _unit.SetParentTile(placedOnTile);
+                placedOnTile.MoveUnitToTile(this);
                 formerTile.ClearTile();
             }
         }
 
-        public OverlayTile GetTileAtPosition()
+        public MapTile GetTileAtPosition()
         {
-            OverlayTile placedOnTile = Physics2D.OverlapCircle(transform.position, 0.1f).GetComponent<OverlayTile>();
-            Debug.Log(placedOnTile.name);
+            MapTile placedOnTile = Physics2D.OverlapCircle(transform.position, 0.1f).GetComponent<MapTile>();
             return placedOnTile;
         }
     }

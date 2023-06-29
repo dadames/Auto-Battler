@@ -4,18 +4,12 @@ using UnityEngine.Tilemaps;
 
 namespace AutoBattler
 {
-    public enum TileType
-    {
-        Normal,
-        Buildable,
-        Blocking,
-    }
-
-    [CreateAssetMenu(fileName = "TileData", menuName = "Scriptable Objects/TileData", order = 3)]
-    public class TileData : ScriptableObject
+    [CreateAssetMenu(fileName = "MapTileData", menuName = "Scriptable Objects/MapTileData", order = 3)]
+    public class MapTileData : ScriptableObject
     {
         public TileBase[] Tiles;
-        public TileType TileType;
+        public int Cost;
+        public bool IsBuildable;
+        public bool IsBlocker;
     }
-
 }

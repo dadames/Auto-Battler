@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,28 +11,40 @@ namespace AutoBattler
         private static MapManager _instance;
         public static MapManager Instance => _instance;
 
-
-        [SerializeField] private OverlayTile _overlayTilePrefab;
+        
+        [SerializeField] private GameObject _mapTilePrefab;
         [SerializeField] private GameObject _tileParent;
         [SerializeField] private Tilemap _tileMap;
         public Tilemap TileMap => _tileMap;
 
-        private readonly Dictionary<Vector2Int, OverlayTile> _map = new();
-        private readonly Dictionary<TileBase, TileData> _tileDataDict = new();
+        private readonly Dictionary<TileBase, MapTileData> _tileToData = new();
+        private readonly Dictionary<Vector2Int, MapTile> _map = new();
+        public Dictionary<Vector2Int, MapTile> Map => _map;
+        private readonly Dictionary<int, MapTile> _intToTile = new();
+        public Dictionary<int, MapTile> IntToTile => _intToTile;
+        private readonly SquareGrid _adjacencyMap = new();
+        public SquareGrid AdjacencyMap => _adjacencyMap;
 
         private void Awake()
         {
             if (_instance == null)
                 _instance = this;
 
-            foreach (var data in Resources.LoadAll<TileData>("ScriptableObjects/TileData/"))
-                foreach (var tile in data.Tiles)
-                    _tileDataDict.Add(tile, data);
+            foreach (MapTileData data in Resources.LoadAll<MapTileData>(Globals.MAPTILE_DATA_FOLDER))
+                foreach (TileBase tile in data.Tiles)
+                    _tileToData.Add(tile, data);
         }
 
         public void GenerateMap()
         {
+            _CreateMapTiles();
+            _CreateAdjacencyMap();
+        }
+
+        private void _CreateMapTiles()
+        {
             BoundsInt bounds = _tileMap.cellBounds;
+            int idIterator = 0;
 
             for (int z = bounds.max.z; z >= bounds.min.z; z--)
             {
@@ -39,58 +52,81 @@ namespace AutoBattler
                 {
                     for (int x = bounds.min.x; x < bounds.max.x; x++)
                     {
-                        Vector3Int tileLocation = new(x, y, z);
+                        Vector3Int gridLocation = new(x, y, z);
                         Vector2Int tileKey = new(x, y);
 
-                        if (_tileMap.HasTile(tileLocation) && !_map.ContainsKey(tileKey))
+                        if (_tileMap.HasTile(gridLocation) && !_map.ContainsKey(tileKey))
                         {
-                            var overlayTile = Instantiate(_overlayTilePrefab, _tileParent.transform);
-                            var cellWorldPos = TileToWorldSpace(tileLocation);
+                            MapTileData data = GetMapTileDataFromPlacedTile(gridLocation);
+                            Vector2 cellWorldPos = TileToWorldSpace(gridLocation);
 
-                            overlayTile.transform.position = new Vector3(cellWorldPos.x, cellWorldPos.y, 0);
-                            overlayTile.SetGridLocation((Vector2Int)tileLocation);
-                            overlayTile.GetComponent<OverlayTile>().HideTile();
-                            overlayTile.name = tileKey.ToString();
+                            MapTile mapTile = new(_mapTilePrefab, idIterator, _tileParent.transform, cellWorldPos, data, (Vector2Int)gridLocation);
 
-                            overlayTile.SetData(GetTileData(tileLocation));
-
-                            _map.Add(tileKey, overlayTile);
+                            _map.Add(tileKey, mapTile);
+                            _intToTile.Add(idIterator, mapTile);
+                            idIterator++;                            
                         }
                     }
                 }
             }
         }
 
-
-        public Vector3 TileToWorldSpace(Vector2Int position)
+        private void _CreateAdjacencyMap()
         {
-            return TileToWorldSpace((Vector3Int)position);
+            foreach (KeyValuePair<Vector2Int, MapTile> from in _map)
+            {
+                _adjacencyMap.Add(GetTileAtPosition(from.Key).Id, _GetAdjacencies(from.Key));
+            }
+        }
+
+        private MapTile[] _GetAdjacencies(Vector2Int from)
+        {
+            List<MapTile> adjacencies = new();
+            if (_map.ContainsKey(from + new Vector2Int(-1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)));
+            if (_map.ContainsKey(from + new Vector2Int(0, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)));
+            if (_map.ContainsKey(from + new Vector2Int(-1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)));
+            if (_map.ContainsKey(from + new Vector2Int(0, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, 1)));
+            if (_map.ContainsKey(from + new Vector2Int(1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 0)));
+            if (_map.ContainsKey(from + new Vector2Int(1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 1)));
+            if (_map.ContainsKey(from + new Vector2Int(-1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 1)));
+            if (_map.ContainsKey(from + new Vector2Int(1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, -1)));
+
+            return adjacencies.ToArray();
+        }
+
+        public Vector3 TileToWorldSpace(Vector2Int pos)
+        {
+            return TileToWorldSpace((Vector3Int)pos);
         }
 
         public Vector3 TileToWorldSpace(Vector3Int position)
         {
-            Vector3 vec = this._tileMap.GetCellCenterWorld(position);
+            Vector3 vec = _tileMap.GetCellCenterWorld(position);
             vec += ((position.x + position.y)) * Vector3.forward;
+
             return vec;
         }
 
-        public TileData GetTileData(Vector3Int position)
+
+        public MapTileData GetMapTileDataFromPlacedTile(Vector3Int position)
         {
             TileBase tileBase = _tileMap.GetTile(position);
 
-            if (!_tileDataDict.ContainsKey(tileBase))
+            if (tileBase == null) Debug.Log("Garfeel");
+            if (!_tileToData.ContainsKey(tileBase))
             {
+                Debug.LogError("Referencing null key.");
                 return null;
             }
             else
             {
-                return _tileDataDict[tileBase];
+                return _tileToData[tileBase];
             }
         }
 
-        public OverlayTile GetTileAtPosition(Vector2Int position)
+        public MapTile GetTileAtPosition(Vector2Int position)
         {
-            OverlayTile tileToReturn;
+            MapTile tileToReturn;
 
             tileToReturn = _map[position];
             if (tileToReturn == null) { Debug.LogError("Referencing point off map."); }
