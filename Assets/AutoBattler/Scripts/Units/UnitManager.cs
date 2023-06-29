@@ -27,11 +27,11 @@ namespace AutoBattler
 
         private void FixedUpdate()
         {
-            if (_initialized == false) return;
+            if (_initialized == false) return;            
 
-            if (path.Count == 0) return;
             if (_unit.ParentTile.Id == path[0])
             {
+                if (path.Count <= 1) return;
                 Debug.Log($"Reached {path[0]} moving to {path[1]}");
                 path.RemoveAt(0);
             }
