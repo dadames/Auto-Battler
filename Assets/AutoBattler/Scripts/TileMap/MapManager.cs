@@ -20,6 +20,7 @@ namespace AutoBattler
         private readonly Dictionary<TileBase, MapTileData> _tileToData = new();
         private readonly Dictionary<Vector2Int, MapTile> _map = new();
         public Dictionary<Vector2Int, MapTile> Map => _map;
+        private readonly Dictionary<Vector2, MapTile> _positionToMapTile = new();
         private readonly Dictionary<int, MapTile> _intToTile = new();
         public Dictionary<int, MapTile> IntToTile => _intToTile;
         private readonly SquareGrid _adjacencyMap = new();
@@ -38,7 +39,8 @@ namespace AutoBattler
         public void GenerateMap()
         {
             _CreateMapTiles();
-            _CreateAdjacencyMap();
+            _CreatePositionToMapTileDictionary();
+            _CreateAdjacencyMapDictionary();
         }
 
         private void _CreateMapTiles()
@@ -71,27 +73,24 @@ namespace AutoBattler
             }
         }
 
-        private void _CreateAdjacencyMap()
+        private void _CreatePositionToMapTileDictionary()
+        {
+            foreach (KeyValuePair<Vector2Int, MapTile> pair in _map)
+            {
+                _positionToMapTile.Add(pair.Value.Position, pair.Value);
+            }
+        }
+
+        private void _CreateAdjacencyMapDictionary()
         {
             foreach (KeyValuePair<Vector2Int, MapTile> from in _map)
-            {
-                //if (from.Value.Id == 110)
-                //{
-                //    Debug.Log(from.Key);
-                //    foreach (MapTile tile in _GetAdjacencies(from.Key))
-                //    {
-                //        Debug.Log(tile.Id);
-                //    }                   
-                //}
                 _adjacencyMap.Add(GetTileAtPosition(from.Key).Id, _GetAdjacencies(from.Key));
-            }
         }
 
         private MapTile[] _GetAdjacencies(Vector2Int from)
         {
             List<MapTile> adjacencies = new();
-            //Debug.Log(from);
-            //Debug.Log(from + new Vector2Int(-1, -1));
+
             if (_map.ContainsKey(from + new Vector2Int(-1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)));
             if (_map.ContainsKey(from + new Vector2Int(0, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)));
             if (_map.ContainsKey(from + new Vector2Int(-1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)));
@@ -117,6 +116,15 @@ namespace AutoBattler
             return vec;
         }
 
+        public bool WorldSpaceIsMapTile(Vector2 position)
+        {
+            return _positionToMapTile.ContainsKey(position);
+        }
+
+        public MapTile WorldSpaceToTile(Vector2 position)
+        {
+            return _positionToMapTile[position];
+        }
 
         public MapTileData GetMapTileDataFromPlacedTile(Vector3Int position)
         {

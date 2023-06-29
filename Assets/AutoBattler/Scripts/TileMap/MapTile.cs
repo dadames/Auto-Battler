@@ -5,6 +5,7 @@ namespace AutoBattler
     public class MapTile
     {
         private MapTileManager _mapTileManager;
+        public MapTileManager MapTileManager => _mapTileManager;
         public Vector2 Position => _mapTileManager.transform.position;
 
         private int _cost;

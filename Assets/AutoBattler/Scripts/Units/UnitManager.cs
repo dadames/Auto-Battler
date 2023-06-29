@@ -50,20 +50,23 @@ namespace AutoBattler
 
         public void SetOccupiedTile()
         {
-            MapTile placedOnTile = GetTileAtPosition().MapTile;
-
-            if (placedOnTile != _unit.ParentTile)
+            if (MapManager.Instance.WorldSpaceIsMapTile(this.transform.position))
             {
-                MapTile formerTile = _unit.ParentTile;
-                _unit.SetParentTile(placedOnTile);
-                placedOnTile.MoveUnitToTile(this);
-                formerTile.ClearTile();
-            }
+                MapTile placedOnTile = GetTileAtWorldPosition().MapTile;
+                if (GetTileAtWorldPosition().MapTile != _unit.ParentTile)
+                {
+                    MapTile formerTile = _unit.ParentTile;
+
+                    _unit.SetParentTile(placedOnTile);
+                    placedOnTile.MoveUnitToTile(this);
+                    formerTile.ClearTile();
+                }
+            }            
         }
 
-        public MapTileManager GetTileAtPosition()
+        public MapTileManager GetTileAtWorldPosition()
         {
-            MapTileManager placedOnTile = Physics2D.OverlapCircle(transform.position, 0.1f).GetComponent<MapTileManager>();
+            MapTileManager placedOnTile = MapManager.Instance.WorldSpaceToTile(this.transform.position).MapTileManager;
             return placedOnTile;
         }
     }
