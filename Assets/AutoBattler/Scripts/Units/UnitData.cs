@@ -7,6 +7,6 @@ namespace AutoBattler
     {
         public int UnitId;
         public GameObject Prefab;
-        public int Speed;
+        [Range(1, 20)] public int Speed;
     }
 }

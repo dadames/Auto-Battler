@@ -7,7 +7,7 @@ namespace AutoBattler
         #region GAME ---------------------------------
 
         public static UnitData[] UNIT_DATA;
-        public static float MOVEMENT_SPEED_SCALING = 0.05f;
+        public static float MOVEMENT_SPEED_SCALING = 0.5f;
 
         #endregion
 

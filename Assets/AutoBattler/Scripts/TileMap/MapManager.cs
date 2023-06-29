@@ -143,7 +143,6 @@ namespace AutoBattler
 
         public MapTile GetTileAtPosition(Vector2Int position)
         {
-            //Debug.Log(position);
             MapTile tileToReturn;
 
             tileToReturn = _map[position];
