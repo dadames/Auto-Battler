@@ -31,7 +31,7 @@ namespace AutoBattler
             HideTile();
             _idText.text = MapTile.Id.ToString();
             _gridLocationText.text = MapTile.GridLocation.ToString();
-            _idText.enabled = false;
+            _idText.enabled = true;
             _gridLocationText.enabled = false;
         }
 

@@ -6,23 +6,17 @@ namespace AutoBattler
 {
     public class SquareGrid : IWeightedGraph<MapTile>
     {
-        private int _id;
-        MapTile[] _adjacencies;
+        Dictionary<int, MapTile[]> grid = new();
 
-        public SquareGrid()
-        {
-
-        }
 
         public void Add(int id, MapTile[] adjacencies)
         {
-            _id = id;
-            _adjacencies = adjacencies;
+            grid.Add(id, adjacencies);
         }
 
-        public IEnumerable<MapTile> Neighbours()
+        public IEnumerable<MapTile> Neighbours(int id)
         {
-            foreach (MapTile maptile in _adjacencies)
+            foreach (MapTile maptile in grid[id])
             {
                 yield return maptile;
             }

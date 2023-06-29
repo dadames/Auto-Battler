@@ -13,7 +13,7 @@ namespace AutoBattler
             return Math.Abs((int)a.x - (int)b.x) + Math.Abs((int)a.y - (int)b.y);
         }
 
-        public static Dictionary<int, int> Search(IWeightedGraph<MapTile> graph, MapTile start, MapTile end)
+        public static List<int> Search(IWeightedGraph<MapTile> graph, MapTile start, MapTile end)
         {
             SimplePriorityQueue<int, double> frontier = new();
             Dictionary<int, int> cameFrom = new();
@@ -27,9 +27,9 @@ namespace AutoBattler
             while (frontier.Count() > 0)
             {
                 int current = frontier.Dequeue();
-                if (current == end.Id) return cameFrom;
+                if (current == end.Id) return _ConvertPathToList(cameFrom, start.Id, end.Id);
 
-                foreach (MapTile next in graph.Neighbours())
+                foreach (MapTile next in graph.Neighbours(current))
                 {
                     int newCost = costSoFar[current] + graph.Cost(next);
 
@@ -45,7 +45,25 @@ namespace AutoBattler
             }
 
             Debug.LogWarning("No Path Found");
-            return cameFrom;
+            return _ConvertPathToList(cameFrom, start.Id, end.Id);
+        }
+
+
+        private static List<int> _ConvertPathToList(Dictionary<int, int> path, int start, int end)
+        {
+            List<int> output = new();
+            output.Insert(0, end);
+            int currentPosition = end;
+            Debug.Log(path[end]);
+            Debug.Log(currentPosition);
+
+            while (output[0] != start)
+            {
+                output.Insert(0, path[currentPosition]);
+                currentPosition = path[currentPosition];                
+            }
+
+            return output;
         }
     }
 }

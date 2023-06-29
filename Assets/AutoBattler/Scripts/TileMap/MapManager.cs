@@ -75,6 +75,14 @@ namespace AutoBattler
         {
             foreach (KeyValuePair<Vector2Int, MapTile> from in _map)
             {
+                //if (from.Value.Id == 110)
+                //{
+                //    Debug.Log(from.Key);
+                //    foreach (MapTile tile in _GetAdjacencies(from.Key))
+                //    {
+                //        Debug.Log(tile.Id);
+                //    }                   
+                //}
                 _adjacencyMap.Add(GetTileAtPosition(from.Key).Id, _GetAdjacencies(from.Key));
             }
         }
@@ -82,6 +90,8 @@ namespace AutoBattler
         private MapTile[] _GetAdjacencies(Vector2Int from)
         {
             List<MapTile> adjacencies = new();
+            //Debug.Log(from);
+            //Debug.Log(from + new Vector2Int(-1, -1));
             if (_map.ContainsKey(from + new Vector2Int(-1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)));
             if (_map.ContainsKey(from + new Vector2Int(0, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)));
             if (_map.ContainsKey(from + new Vector2Int(-1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)));
@@ -112,7 +122,6 @@ namespace AutoBattler
         {
             TileBase tileBase = _tileMap.GetTile(position);
 
-            if (tileBase == null) Debug.Log("Garfeel");
             if (!_tileToData.ContainsKey(tileBase))
             {
                 Debug.LogError("Referencing null key.");
@@ -126,6 +135,7 @@ namespace AutoBattler
 
         public MapTile GetTileAtPosition(Vector2Int position)
         {
+            //Debug.Log(position);
             MapTile tileToReturn;
 
             tileToReturn = _map[position];

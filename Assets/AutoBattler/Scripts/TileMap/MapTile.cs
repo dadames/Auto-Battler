@@ -45,5 +45,10 @@ namespace AutoBattler
         {
             _occupyingUnit = null;
         }
+
+        public void HighlightTile()
+        {
+            _mapTileManager.ShowTile();
+        }
     }
 }

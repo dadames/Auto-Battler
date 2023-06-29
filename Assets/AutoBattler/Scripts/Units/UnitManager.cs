@@ -10,7 +10,7 @@ namespace AutoBattler
         private Rigidbody2D _rigidBody;
 
         private bool _initialized = false;
-        public Dictionary<int, int> path;
+        public List<int> path;
 
         public void Initialize(Unit unit, Vector2Int position)
         {
@@ -19,9 +19,9 @@ namespace AutoBattler
             SetPosition(position);
             _initialized = true;
             path = AStarSearch.Search(MapManager.Instance.AdjacencyMap, _unit.ParentTile, MapManager.Instance.IntToTile[20]);
-            foreach (KeyValuePair<int, int> pair in path)
+            foreach (int tile in path)
             {
-                Debug.Log($"{pair.Key}, {pair.Value}");
+                MapManager.Instance.IntToTile[tile].HighlightTile();
             }
         }
 
@@ -29,10 +29,11 @@ namespace AutoBattler
         {
             if (_initialized == false) return;
 
+            if (path.Count == 0) return;
             if (_unit.ParentTile.Id == path[0])
             {
                 Debug.Log($"Reached {path[0]} moving to {path[1]}");
-                path.Remove(0);                
+                path.RemoveAt(0);
             }
 
             Vector2 newPosition = Vector2.MoveTowards(transform.position, MapManager.Instance.IntToTile[path[0]].Position, Time.deltaTime * _unit.Speed);
@@ -49,7 +50,7 @@ namespace AutoBattler
 
         public void SetOccupiedTile()
         {
-            MapTile placedOnTile = GetTileAtPosition();
+            MapTile placedOnTile = GetTileAtPosition().MapTile;
 
             if (placedOnTile != _unit.ParentTile)
             {
@@ -60,9 +61,9 @@ namespace AutoBattler
             }
         }
 
-        public MapTile GetTileAtPosition()
+        public MapTileManager GetTileAtPosition()
         {
-            MapTile placedOnTile = Physics2D.OverlapCircle(transform.position, 0.1f).GetComponent<MapTile>();
+            MapTileManager placedOnTile = Physics2D.OverlapCircle(transform.position, 0.1f).GetComponent<MapTileManager>();
             return placedOnTile;
         }
     }
