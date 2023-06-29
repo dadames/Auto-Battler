@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a22b70d943b19f4193c6116141713b9, type: 3}
-  m_Name: MapTileData
+  m_Name: Wall
   m_EditorClassIdentifier: 
   Tiles:
-  - {fileID: 11400000, guid: 5903010eb5b1a98478977e5e6985c09e, type: 2}
+  - {fileID: 11400000, guid: f99201935bb444f4b9e683c5e6a57518, type: 2}
   Cost: 1
   IsBuildable: 0
-  IsBlocker: 0
+  IsBlocker: 1

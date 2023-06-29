@@ -25,7 +25,7 @@ namespace AutoBattler
 
         public void Initialize(Unit unit, Vector2Int position)
         {
-            _destinationTile = 50;
+            _destinationTile = 0;
             _unit = unit;
             _rigidBody = GetComponent<Rigidbody2D>();
             SetPosition(position);
@@ -33,7 +33,7 @@ namespace AutoBattler
             _OnUpdatePathfinding();
             foreach (int tile in path)
             {
-                MapManager.Instance.IntToTile[tile].HighlightTile();
+                
             }
         }
 
