@@ -18,6 +18,8 @@ namespace AutoBattler
         public Tilemap TileMap => _tileMap;
 
         private readonly Dictionary<TileBase, MapTileData> _tileToData = new();
+        private readonly Dictionary<int, MapTile> _idToMapTile = new();
+        public Dictionary<int, MapTile> IdToMapTile => _idToMapTile;
         private readonly Dictionary<Vector2Int, MapTile> _map = new();
         public Dictionary<Vector2Int, MapTile> Map => _map;
         private readonly Dictionary<Vector2, MapTile> _positionToMapTile = new();
@@ -64,6 +66,7 @@ namespace AutoBattler
 
                             MapTile mapTile = new(_mapTilePrefab, idIterator, _tileParent.transform, cellWorldPos, data, (Vector2Int)gridLocation);
 
+                            _idToMapTile.Add(mapTile.Id, mapTile);
                             _map.Add(tileKey, mapTile);
                             _intToTile.Add(idIterator, mapTile);
                             idIterator++;                            
@@ -87,20 +90,20 @@ namespace AutoBattler
                 _adjacencyMap.Add(GetTileAtPosition(from.Key).Id, _GetAdjacencies(from.Key));
         }
 
-        private MapTile[] _GetAdjacencies(Vector2Int from)
+        private Dictionary<int, int> _GetAdjacencies(Vector2Int from)
         {
-            List<MapTile> adjacencies = new();
+            Dictionary<int, int> adjacencies = new();
+            
+            if (_map.ContainsKey(from + new Vector2Int(0, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)).Id, GetTileAtPosition(from + new Vector2Int(0, -1)).Cost);
+            if (_map.ContainsKey(from + new Vector2Int(-1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)).Id, GetTileAtPosition(from + new Vector2Int(-1, 0)).Cost);
+            if (_map.ContainsKey(from + new Vector2Int(0, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, 1)).Id, GetTileAtPosition(from + new Vector2Int(0, 1)).Cost);
+            if (_map.ContainsKey(from + new Vector2Int(1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 0)).Id, GetTileAtPosition(from + new Vector2Int(1, 0)).Cost);
+            if (_map.ContainsKey(from + new Vector2Int(-1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)).Id, GetTileAtPosition(from + new Vector2Int(-1, -1)).Cost + 1);
+            if (_map.ContainsKey(from + new Vector2Int(1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 1)).Id, GetTileAtPosition(from + new Vector2Int(1, 1)).Cost + 1);
+            if (_map.ContainsKey(from + new Vector2Int(-1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 1)).Id, GetTileAtPosition(from + new Vector2Int(-1, 1)).Cost + 1);
+            if (_map.ContainsKey(from + new Vector2Int(1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, -1)).Id, GetTileAtPosition(from + new Vector2Int(1, -1)).Cost + 1);
 
-            if (_map.ContainsKey(from + new Vector2Int(-1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)));
-            if (_map.ContainsKey(from + new Vector2Int(0, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)));
-            if (_map.ContainsKey(from + new Vector2Int(-1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)));
-            if (_map.ContainsKey(from + new Vector2Int(0, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, 1)));
-            if (_map.ContainsKey(from + new Vector2Int(1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 0)));
-            if (_map.ContainsKey(from + new Vector2Int(1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 1)));
-            if (_map.ContainsKey(from + new Vector2Int(-1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 1)));
-            if (_map.ContainsKey(from + new Vector2Int(1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, -1)));
-
-            return adjacencies.ToArray();
+            return adjacencies;
         }
 
         public Vector3 TileToWorldSpace(Vector2Int pos)
