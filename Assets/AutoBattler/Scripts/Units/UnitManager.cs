@@ -33,7 +33,7 @@ namespace AutoBattler
             _OnUpdatePathfinding();
             foreach (int tile in path)
             {
-                
+                MapManager.Instance.IntToTile[tile].HighlightTile();
             }
         }
 

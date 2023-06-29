@@ -31,15 +31,17 @@ namespace AutoBattler
 
                 foreach (MapTile next in graph.Neighbours(current))
                 {
-                    int newCost = costSoFar[current] + graph.Cost(next);
                     if (!next.IsBlocked) continue;
+                    int newCost = costSoFar[current] + next.Cost;                    
 
-                    if ((!costSoFar.ContainsKey(next.Id) || newCost < costSoFar[next.Id]))
+                    if (!costSoFar.ContainsKey(next.Id) || newCost < costSoFar[next.Id])
                     {
                         costSoFar[next.Id] = newCost;
                         int priority = newCost + Heuristic(next.GridLocation, end.GridLocation);
                         frontier.Enqueue(next.Id, priority);
                         cameFrom[next.Id] = current;
+                        if (next.Id == 52) Debug.Log($"Garfeel {newCost} {Heuristic(next.GridLocation, end.GridLocation)}");
+                        Debug.Log($"{newCost} {Heuristic(next.GridLocation, end.GridLocation)} {priority}");
                     }
                 }
             }
@@ -55,11 +57,7 @@ namespace AutoBattler
             output.Insert(0, end);
             int currentPosition = end;
 
-            foreach (KeyValuePair<int, int> tile in path)
-            {
-                Debug.Log($"{tile.Key}, {tile.Value}");
-                MapManager.Instance.IntToTile[tile.Key].HighlightTile();
-            }
+            
             while (output[0] != start)
             {
                 output.Insert(0, path[currentPosition]);

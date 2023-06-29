@@ -32,6 +32,7 @@ namespace AutoBattler
             _gridLocation = gridPosition;
             g.transform.position = new(cellWorldPos.x, cellWorldPos.y, 0);
             g.transform.name = $"{_gridLocation}";
+            _cost = data.Cost;
             _isBlocker = data.IsBlocker;
             _isBuildable = data.IsBuildable;
             _mapTileManager.Initialize(this);
