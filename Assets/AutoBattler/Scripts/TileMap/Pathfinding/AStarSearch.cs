@@ -40,8 +40,6 @@ namespace AutoBattler
                         int priority = newCost + Heuristic(next.GridLocation, end.GridLocation);
                         frontier.Enqueue(next.Id, priority);
                         cameFrom[next.Id] = current;
-                        if (next.Id == 52) Debug.Log($"Garfeel {newCost} {Heuristic(next.GridLocation, end.GridLocation)}");
-                        Debug.Log($"{newCost} {Heuristic(next.GridLocation, end.GridLocation)} {priority}");
                     }
                 }
             }
