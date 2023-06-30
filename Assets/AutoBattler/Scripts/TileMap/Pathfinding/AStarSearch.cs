@@ -54,7 +54,6 @@ namespace AutoBattler
             List<int> output = new();
             output.Insert(0, end);
             int currentPosition = end;
-
             
             while (output[0] != start)
             {

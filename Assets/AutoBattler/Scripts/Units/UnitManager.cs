@@ -10,7 +10,7 @@ namespace AutoBattler
         private Rigidbody2D _rigidBody;
 
         private bool _initialized = false;
-        public List<int> path;
+        private List<int> _path;
         private int _destinationTile;
 
         private void OnEnable()
@@ -28,13 +28,11 @@ namespace AutoBattler
             _destinationTile = 0;
             _unit = unit;
             _rigidBody = GetComponent<Rigidbody2D>();
-            SetPosition(position);
-            _initialized = true;
+            SetPosition(position);            
             _OnUpdatePathfinding();
-            foreach (int tile in path)
-            {
+            foreach (int tile in _path)
                 MapManager.Instance.IdToMapTile[tile].HighlightTile();
-            }
+            _initialized = true;
         }
 
         private void FixedUpdate()
@@ -46,25 +44,25 @@ namespace AutoBattler
 
         private void _OnUpdatePathfinding()
         {
-            path = AStarSearch.Search(MapManager.Instance.AdjacencyMap, _unit.ParentTile, MapManager.Instance.IdToMapTile[_destinationTile]);
+            _path = AStarSearch.Search(MapManager.Instance.PathfindingGrid, _unit.ParentTile, MapManager.Instance.IdToMapTile[_destinationTile]);
         }
 
         private void _PathFinding()
         {
             _CheckIfReachedDestination();
 
-            Vector2 newPosition = Vector2.MoveTowards(transform.position, MapManager.Instance.IdToMapTile[path[0]].Position, Time.deltaTime * _unit.Speed* Globals.MOVEMENT_SPEED_SCALING);
+            Vector2 newPosition = Vector2.MoveTowards(transform.position, MapManager.Instance.IdToMapTile[_path[0]].Position, Time.deltaTime * _unit.Speed* Globals.MOVEMENT_SPEED_SCALING);
             _rigidBody.MovePosition(newPosition);
             SetOccupiedTile();
         }
 
         public void _CheckIfReachedDestination()
         {
-            if (_unit.ParentTile.Id == path[0])
+            if (_unit.ParentTile.Id == _path[0])
             {
-                if (path.Count <= 1) return;
-                Debug.Log($"Reached {path[0]} moving to {path[1]}");
-                path.RemoveAt(0);
+                if (_path.Count <= 1) return;
+                Debug.Log($"Reached {_path[0]} moving to {_path[1]}");
+                _path.RemoveAt(0);
             }
         }
 

@@ -22,8 +22,8 @@ namespace AutoBattler
         public Dictionary<int, MapTile> IdToMapTile => _idToMapTile;
         private readonly Dictionary<Vector2, MapTile> _worldPositionToMapTile = new();
         private readonly Dictionary<Vector2Int, MapTile> _gridLocationToMapTile = new();
-        private readonly SquareGrid _adjacencyMap = new();
-        public SquareGrid AdjacencyMap => _adjacencyMap;
+        private readonly SquareGrid _pathfindingGrid = new();
+        public SquareGrid PathfindingGrid => _pathfindingGrid;
 
         private void Awake()
         {
@@ -38,8 +38,7 @@ namespace AutoBattler
         public void GenerateMap()
         {
             _CreateMapTiles();
-            _CreateReverseLookupDictionaries();
-            _CreateAdjacencyMapDictionary();
+            _CreatePathfindingGrid();
         }
 
         private void _CreateMapTiles()
@@ -63,6 +62,8 @@ namespace AutoBattler
                             MapTile mapTile = new(_mapTilePrefab, idIterator, _tileParent.transform, cellWorldPos, data, (Vector2Int)gridLocation);
 
                             _idToMapTile.Add(mapTile.Id, mapTile);
+                            _worldPositionToMapTile.Add(mapTile.Position, mapTile);
+                            _gridLocationToMapTile.Add(mapTile.GridLocation, mapTile);
                             idIterator++;                            
                         }
                     }
@@ -70,33 +71,34 @@ namespace AutoBattler
             }
         }
 
-        private void _CreateReverseLookupDictionaries()
+        private void _CreatePathfindingGrid()
         {
             foreach (KeyValuePair<int, MapTile> pair in IdToMapTile)
             {
-                _worldPositionToMapTile.Add(pair.Value.Position, pair.Value);
-                _gridLocationToMapTile.Add(pair.Value.GridLocation, pair.Value);
+                _pathfindingGrid.Add(pair.Key, _GetAdjacencies(pair.Value.GridLocation));
             }
-        }
-
-        private void _CreateAdjacencyMapDictionary()
-        {
-            foreach (KeyValuePair<int, MapTile> from in IdToMapTile)
-                _adjacencyMap.Add(GetTileAtPosition(from.Value.GridLocation).Id, _GetAdjacencies(from.Value.GridLocation));
         }
 
         private Dictionary<int, int> _GetAdjacencies(Vector2Int from)
         {
             Dictionary<int, int> adjacencies = new();
             
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(0, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)).Id, GetTileAtPosition(from + new Vector2Int(0, -1)).Cost);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)).Id, GetTileAtPosition(from + new Vector2Int(-1, 0)).Cost);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(0, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, 1)).Id, GetTileAtPosition(from + new Vector2Int(0, 1)).Cost);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, 0))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 0)).Id, GetTileAtPosition(from + new Vector2Int(1, 0)).Cost);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)).Id, GetTileAtPosition(from + new Vector2Int(-1, -1)).Cost + 1);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 1)).Id, GetTileAtPosition(from + new Vector2Int(1, 1)).Cost + 1);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, 1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 1)).Id, GetTileAtPosition(from + new Vector2Int(-1, 1)).Cost + 1);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, -1))) adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, -1)).Id, GetTileAtPosition(from + new Vector2Int(1, -1)).Cost + 1);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(0, -1))) 
+                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)).Id, GetTileAtPosition(from + new Vector2Int(0, -1)).Cost);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, 0))) 
+                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)).Id, GetTileAtPosition(from + new Vector2Int(-1, 0)).Cost);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(0, 1))) 
+                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, 1)).Id, GetTileAtPosition(from + new Vector2Int(0, 1)).Cost);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, 0))) 
+                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 0)).Id, GetTileAtPosition(from + new Vector2Int(1, 0)).Cost);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, -1))) 
+                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)).Id, GetTileAtPosition(from + new Vector2Int(-1, -1)).Cost + 1);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, 1))) 
+                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 1)).Id, GetTileAtPosition(from + new Vector2Int(1, 1)).Cost + 1);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, 1))) 
+                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 1)).Id, GetTileAtPosition(from + new Vector2Int(-1, 1)).Cost + 1);
+            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, -1))) 
+                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, -1)).Id, GetTileAtPosition(from + new Vector2Int(1, -1)).Cost + 1);
 
             return adjacencies;
         }
