@@ -7,6 +7,7 @@ namespace AutoBattler
     public class UnitManager : MonoBehaviour
     {
         private Unit _unit;
+        public Unit Unit => _unit;
         private Rigidbody2D _rigidBody;
 
         private bool _initialized = false;
@@ -61,7 +62,6 @@ namespace AutoBattler
             if (_unit.ParentTile.Id == _path[0])
             {
                 if (_path.Count <= 1) return;
-                //Debug.Log($"Reached {_path[0]} moving to {_path[1]}");
                 _path.RemoveAt(0);
             }
         }
@@ -87,6 +87,21 @@ namespace AutoBattler
                     formerTile.ClearTile();
                 }
             }            
+        }
+
+        public void SetDestination(int destinationTile)
+        {
+            _destinationTile = destinationTile;
+        }
+
+        public void Attack(UnitManager target)
+        {
+            target.Damage(1);
+        }
+
+        public void Damage(int damage)
+        {
+
         }
 
         public MapTileManager GetTileAtWorldPosition()

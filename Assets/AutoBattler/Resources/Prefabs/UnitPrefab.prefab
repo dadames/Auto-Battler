@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7784279659112204756}
   - component: {fileID: 72718440161998670}
   - component: {fileID: 5941431290466975244}
+  - component: {fileID: 2123578944480892915}
   m_Layer: 0
   m_Name: UnitPrefab
   m_TagString: Untagged
@@ -32,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7784279659112204756
 SpriteRenderer:
@@ -123,5 +124,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d31e7ee115d0a8b45be7a83d7647c184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2123578944480892915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235820203357574716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9c388d3fc61bd4899eb62f91ac7f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
