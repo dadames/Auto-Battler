@@ -13,16 +13,16 @@ namespace AutoBattler
         public int Speed => _speed;
 
 
-        public Unit(UnitData data, Vector2Int position)
+        public Unit(UnitData data, int mapTileId)
         {
             GameObject g = GameObject.Instantiate(data.Prefab);
             _transform = g.transform;
             _transform.name = $"{data.UnitId}";
             _unitManager = g.transform.GetComponent<UnitManager>();
             _speed = data.Speed;
-            _parentTile = MapManager.Instance.GetTileAtPosition(position);
+            _parentTile = MapManager.Instance.IdToMapTile[mapTileId];
 
-            _unitManager.Initialize(this, position);
+            _unitManager.Initialize(this, _parentTile.GridLocation);
         }
 
         public void SetParentTile(MapTile tile)

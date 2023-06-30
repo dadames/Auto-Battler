@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: TileMap
+    uniqueID: 2374616307
+    locked: 0
+  - name: Building
+    uniqueID: 1714485573
+    locked: 0
+  - name: Unit
+    uniqueID: 1661673117
+    locked: 0

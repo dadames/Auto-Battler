@@ -42,6 +42,7 @@ namespace AutoBattler
         {
             if (_isBlocker) Debug.LogError($"Unit moved to blocker tile {_id}");
             _occupyingUnit = unit;
+            Debug.Log($"{_id}, {_occupyingUnit}");
             EventManager.TriggerEvent("UpdatePathfinding");
         }
 

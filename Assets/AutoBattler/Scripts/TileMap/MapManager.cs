@@ -97,15 +97,14 @@ namespace AutoBattler
             return adjacencies;
         }
 
-        public Vector3 TileToWorldSpace(Vector2Int pos)
+        public Vector2 TileToWorldSpace(Vector2Int pos)
         {
             return TileToWorldSpace((Vector3Int)pos);
         }
 
-        public Vector3 TileToWorldSpace(Vector3Int position)
+        public Vector2 TileToWorldSpace(Vector3Int position)
         {
-            Vector3 vec = _tileMap.GetCellCenterWorld(position);
-            vec += ((position.x + position.y)) * Vector3.forward;
+            Vector2 vec = _tileMap.GetCellCenterWorld(position);
 
             return vec;
         }

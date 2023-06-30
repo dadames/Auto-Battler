@@ -23,12 +23,12 @@ namespace AutoBattler
             EventManager.RemoveListener("UpdatePathfinding", _OnUpdatePathfinding);
         }
 
-        public void Initialize(Unit unit, Vector2Int position)
+        public void Initialize(Unit unit, Vector2Int gridPosition)
         {
             _destinationTile = 0;
             _unit = unit;
             _rigidBody = GetComponent<Rigidbody2D>();
-            SetPosition(position);            
+            SetPosition(gridPosition);            
             _OnUpdatePathfinding();
             foreach (int tile in _path)
                 MapManager.Instance.IdToMapTile[tile].HighlightTile();
@@ -61,7 +61,7 @@ namespace AutoBattler
             if (_unit.ParentTile.Id == _path[0])
             {
                 if (_path.Count <= 1) return;
-                Debug.Log($"Reached {_path[0]} moving to {_path[1]}");
+                //Debug.Log($"Reached {_path[0]} moving to {_path[1]}");
                 _path.RemoveAt(0);
             }
         }

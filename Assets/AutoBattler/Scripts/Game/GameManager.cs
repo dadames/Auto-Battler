@@ -11,13 +11,14 @@ namespace AutoBattler
         }
         private void Start()
         {
-            SpawnUnit(0, new Vector2Int(0,0));
+            SpawnUnit(0, 10);
+            SpawnUnit(0, 110);
         }
 
-        public void SpawnUnit(int unitId, Vector2Int unitPos)
+        public void SpawnUnit(int unitId, int mapTileId)
         {
             UnitData unitData = Globals.UNIT_DATA.Where((UnitData x) => x.UnitId == unitId).First();
-            Unit die = new(unitData, unitPos);
+            Unit die = new(unitData, mapTileId);
         }
     }
 }
