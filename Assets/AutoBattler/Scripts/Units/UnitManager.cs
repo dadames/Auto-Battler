@@ -25,7 +25,7 @@ namespace AutoBattler
 
         public void Initialize(Unit unit, Vector2Int gridPosition)
         {
-            _destinationTile = 0;
+            _destinationTile = 17;
             _unit = unit;
             _rigidBody = GetComponent<Rigidbody2D>();
             SetPosition(gridPosition);            

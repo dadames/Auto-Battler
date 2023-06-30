@@ -20,7 +20,7 @@ namespace AutoBattler
         private bool _isBlocker;
         public bool IsBlocked
         {
-            get { return !_isBlocker || _occupyingUnit != null; }
+            get { return _isBlocker || _occupyingUnit != null; }
         }
 
 
@@ -42,7 +42,6 @@ namespace AutoBattler
         {
             if (_isBlocker) Debug.LogError($"Unit moved to blocker tile {_id}");
             _occupyingUnit = unit;
-            Debug.Log($"{_id}, {_occupyingUnit}");
             EventManager.TriggerEvent("UpdatePathfinding");
         }
 
