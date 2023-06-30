@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace AutoBattler
 {
@@ -8,6 +9,8 @@ namespace AutoBattler
 
         public static UnitData[] UNIT_DATA;
         public static float MOVEMENT_SPEED_SCALING = 0.5f;
+        public static List<Vector2Int> TILEMAP_STRAIGHT_MOVES = new();
+        public static List<Vector2Int> TILEMAP_DIAGONAL_MOVES = new();
 
         #endregion
 

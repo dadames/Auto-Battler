@@ -12,6 +12,17 @@ namespace AutoBattler
         public void LoadGameData()
         {
             Globals.UNIT_DATA = Resources.LoadAll<UnitData>(Globals.UNIT_DATA_FOLDER) as UnitData[];
+
+            //TileMap Directions
+            Globals.TILEMAP_STRAIGHT_MOVES.Add(new Vector2Int(0, -1));
+            Globals.TILEMAP_STRAIGHT_MOVES.Add(new Vector2Int(-1, 0));
+            Globals.TILEMAP_STRAIGHT_MOVES.Add(new Vector2Int(0, 1));
+            Globals.TILEMAP_STRAIGHT_MOVES.Add(new Vector2Int(1, 0));
+
+            Globals.TILEMAP_DIAGONAL_MOVES.Add(new Vector2Int(-1, -1));
+            Globals.TILEMAP_DIAGONAL_MOVES.Add(new Vector2Int(1, 1));
+            Globals.TILEMAP_DIAGONAL_MOVES.Add(new Vector2Int(-1, 1));
+            Globals.TILEMAP_DIAGONAL_MOVES.Add(new Vector2Int(1, -1));
         }
     }
 }

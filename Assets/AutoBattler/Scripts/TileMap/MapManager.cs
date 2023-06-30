@@ -82,23 +82,17 @@ namespace AutoBattler
         private Dictionary<int, int> _GetAdjacencies(Vector2Int from)
         {
             Dictionary<int, int> adjacencies = new();
-            
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(0, -1))) 
-                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, -1)).Id, GetTileAtPosition(from + new Vector2Int(0, -1)).Cost);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, 0))) 
-                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 0)).Id, GetTileAtPosition(from + new Vector2Int(-1, 0)).Cost);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(0, 1))) 
-                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(0, 1)).Id, GetTileAtPosition(from + new Vector2Int(0, 1)).Cost);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, 0))) 
-                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 0)).Id, GetTileAtPosition(from + new Vector2Int(1, 0)).Cost);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, -1))) 
-                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, -1)).Id, GetTileAtPosition(from + new Vector2Int(-1, -1)).Cost + 1);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, 1))) 
-                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, 1)).Id, GetTileAtPosition(from + new Vector2Int(1, 1)).Cost + 1);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(-1, 1))) 
-                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(-1, 1)).Id, GetTileAtPosition(from + new Vector2Int(-1, 1)).Cost + 1);
-            if (_gridLocationToMapTile.ContainsKey(from + new Vector2Int(1, -1))) 
-                adjacencies.Add(GetTileAtPosition(from + new Vector2Int(1, -1)).Id, GetTileAtPosition(from + new Vector2Int(1, -1)).Cost + 1);
+
+            foreach (Vector2Int direction in Globals.TILEMAP_STRAIGHT_MOVES)
+            {
+                if (_gridLocationToMapTile.ContainsKey(from + direction))
+                    adjacencies.Add(GetTileAtPosition(from + direction).Id, GetTileAtPosition(from + direction).Cost);
+            }
+            foreach (Vector2Int direction in Globals.TILEMAP_DIAGONAL_MOVES)
+            {
+                if (_gridLocationToMapTile.ContainsKey(from + direction))
+                    adjacencies.Add(GetTileAtPosition(from + direction).Id, GetTileAtPosition(from + direction).Cost + 1);
+            }
 
             return adjacencies;
         }
