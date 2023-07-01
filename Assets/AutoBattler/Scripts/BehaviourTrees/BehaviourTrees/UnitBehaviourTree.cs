@@ -21,7 +21,7 @@ namespace AutoBattler
             //Prepare Subtrees
             Sequence AttackNearbyEnemy = new(new List<Node> {
                 new CheckEnemyInRange(_unitManager),
-                new TaskAttack(_unitManager),
+
             });
 
             Sequence FindDestination = new(new List<Node> {

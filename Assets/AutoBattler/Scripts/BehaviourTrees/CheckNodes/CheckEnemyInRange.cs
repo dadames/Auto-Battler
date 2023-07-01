@@ -17,10 +17,6 @@ namespace AutoBattler
         {
             List<UnitManager> enemiesInRange = TilemapUtilities.FindUnitsInRangeByOwnerId(_unit.ParentTile, _unit.AttackRange, _unit.EnemyIds);
 
-
-            //Pathfinding check each tile within range until enemy is found
-            //Set closest enemy
-
             if (enemiesInRange.Any())
             {
                 Root.SetData("targetUnit", TilemapUtilities.FindClosestUnitByOwnerId(_unit.ParentTile, _unit.AttackRange, _unit.EnemyIds));

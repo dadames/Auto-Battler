@@ -84,7 +84,6 @@ namespace AutoBattler
             {
                 foreach (int id in unitOwnerIds)
                 {
-
                     if (id != unitManager.Unit.OwnerId)
                     {
                         enemiesInRange.Remove(unitManager);
@@ -101,6 +100,9 @@ namespace AutoBattler
             Queue<int> frontier = new();
             frontier.Enqueue(start.Id);
 
+            List<int> reached = new();
+            reached.Add(start.Id);
+
 
             while (frontier.Count > 0)
             {
@@ -108,7 +110,7 @@ namespace AutoBattler
 
                 foreach (MapTile next in graph.Neighbours(current))
                 {
-                    if (next.IsBlocker) { continue; }
+                    if (next.IsBlocker || reached.Contains(next.Id)) { continue; }
                     if (next.ContainsUnit)
                     {
                         unitsInRange.Add(next.OccupyingUnit);
@@ -116,6 +118,7 @@ namespace AutoBattler
                     if (CompareDistance(next.GridLocation, start.GridLocation) <= range)
                     {
                         frontier.Enqueue(next.Id);
+                        reached.Add(next.Id);
                     }
                 }
             }

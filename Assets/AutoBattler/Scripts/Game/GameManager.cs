@@ -15,7 +15,6 @@ namespace AutoBattler
 
         private void Awake()
         {
-            Debug.Log("Got here");
             if (_instance == null)
                 _instance = this;
 
