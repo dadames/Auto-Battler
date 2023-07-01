@@ -14,7 +14,7 @@ namespace AutoBattler
 
         public override NodeState Evaluate()
         {
-            Debug.Log($"{_unitManager.Unit.OwnerId} TaskAttack");
+            //Debug.Log($"{_unitManager.Unit.OwnerId} TaskAttack");
             UnitManager targetUnit = (UnitManager)GetData("targetUnit");
 
             _unitManager.Attack(targetUnit);

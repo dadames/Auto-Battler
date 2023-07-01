@@ -105,6 +105,7 @@ namespace AutoBattler
         public void SetDestination(int destinationTile)
         {
             _destinationTile = destinationTile;
+            _OnUpdatePathfinding();
         }
 
         public void Attack(UnitManager target)
@@ -114,7 +115,7 @@ namespace AutoBattler
 
         public void Damage(int damage)
         {
-            Debug.Log($"{Unit.OwnerId} taking {damage} damage");
+            //Debug.Log($"{Unit.OwnerId} taking {damage} damage");
         }
 
         public MapTileManager GetTileAtWorldPosition()

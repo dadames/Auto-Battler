@@ -23,6 +23,7 @@ namespace AutoBattler
 
             if (enemiesInRange.Any())
             {
+                Debug.Log($"Setting Enemy");
                 Root.SetData("targetUnit", TilemapUtilities.FindClosestUnitByOwnerId(_unit.ParentTile, _unit.AttackRange, _unit.EnemyIds));
                 _state = NodeState.SUCCESS;
                 return _state;
