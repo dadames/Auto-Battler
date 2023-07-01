@@ -7,16 +7,17 @@ namespace AutoBattler
 {
     public class TaskSetDefaultDestination : Node
     {
-        UnitManager _unitManager;
+        Unit _unit;
 
         public TaskSetDefaultDestination(UnitManager unitManager)
         {
-            _unitManager = unitManager;
+            _unit = unitManager.Unit;
         }
 
         public override NodeState Evaluate()
         {
-            Root.SetData("destinationMapTileId", _unitManager.Unit.DefaultDestination);
+            Debug.Log($"{_unit.OwnerId} TaskSetDefaultDestination");
+            Root.SetData("destinationMapTileId", _unit.DefaultDestination);
 
             _state = NodeState.SUCCESS;
             return _state;

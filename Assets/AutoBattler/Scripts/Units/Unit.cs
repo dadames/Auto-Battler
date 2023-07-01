@@ -31,12 +31,12 @@ namespace AutoBattler
 
             _ownerId = ownerId;
             _enemyIds = enemyIds;
-            _parentTile = MapManager.Instance.IdToMapTile[mapTileId];
+            //_parentTile = MapManager.Instance.IdToMapTile[mapTileId];
 
             _speed = data.Speed;
             _attackRange = data.AttackRange;
 
-            _unitManager.Initialize(this, _parentTile.GridLocation);
+            _unitManager.Initialize(this, mapTileId);
         }
 
         public void SetParentTile(MapTile tile)

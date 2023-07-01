@@ -27,15 +27,13 @@ namespace AutoBattler
             EventManager.RemoveListener("UpdatePathfinding", _OnUpdatePathfinding);
         }
 
-        public void Initialize(Unit unit, Vector2Int gridPosition)
+        public void Initialize(Unit unit, int mapTileId)
         {
-            _destinationTile = 17;
             _unit = unit;
             _rigidBody = GetComponent<Rigidbody2D>();
-            SetPosition(gridPosition);            
-            _OnUpdatePathfinding();
-            foreach (int tile in _path)
-                MapManager.Instance.IdToMapTile[tile].HighlightTile();
+            SetObjectPosition(mapTileId);
+            this.GetComponent<UnitBehaviourTree>().enabled = true;
+
             _initialized = true;
         }
 
@@ -79,11 +77,12 @@ namespace AutoBattler
             }
         }
 
-        public void SetPosition(Vector2Int position)
+        public void SetObjectPosition(int mapTileId)
         {
-            MapTile placedOnTile = MapManager.Instance.GetTileAtPosition(position);
+            MapTile placedOnTile = MapManager.Instance.IdToMapTile[mapTileId];
 
             transform.position = MapManager.Instance.TileToWorldSpace(placedOnTile.GridLocation);
+            SetOccupiedTile();
         }
 
         public void SetOccupiedTile()
@@ -91,7 +90,13 @@ namespace AutoBattler
             if (MapManager.Instance.WorldSpaceIsMapTile(this.transform.position))
             {
                 MapTile placedOnTile = GetTileAtWorldPosition().MapTile;
-                if (GetTileAtWorldPosition().MapTile != _unit.ParentTile)
+
+                if (_unit.ParentTile == null)
+                {
+                    _unit.SetParentTile(placedOnTile);
+                    placedOnTile.MoveUnitToTile(this);
+                }
+                else if (GetTileAtWorldPosition().MapTile != _unit.ParentTile)
                 {
                     MapTile formerTile = _unit.ParentTile;
 

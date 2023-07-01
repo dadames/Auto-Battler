@@ -14,7 +14,7 @@ namespace AutoBattler
 
         public override NodeState Evaluate()
         {
-            Debug.Log($"{_unitManager.Unit.OwnerId} TaskSetDestinationStay");
+            //Debug.Log($"{_unitManager.Unit.OwnerId} TaskSetDestinationStay");
             int destinationTileId = _unitManager.Unit.ParentTile.Id;
             Debug.Log(destinationTileId);
             _unitManager.SetDestination(destinationTileId);
