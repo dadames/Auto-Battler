@@ -15,6 +15,8 @@ namespace AutoBattler
         
         public override NodeState Evaluate()
         {
+            Root.ClearData("targetUnit");
+
             List<UnitManager> enemiesInRange = TilemapUtilities.FindUnitsInRangeByOwnerId(_unit.ParentTile, _unit.AttackRange, _unit.EnemyIds);
 
             if (enemiesInRange.Any())

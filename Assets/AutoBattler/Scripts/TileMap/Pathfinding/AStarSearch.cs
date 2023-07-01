@@ -48,7 +48,7 @@ namespace AutoBattler
             }
 
             Debug.LogWarning("No Path Found");
-            return _ConvertPathToList(cameFrom, start.Id, end.Id);
+            return null;
         }
 
 

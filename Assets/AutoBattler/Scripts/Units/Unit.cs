@@ -12,6 +12,8 @@ namespace AutoBattler
 
         private MapTile _parentTile;
         public MapTile ParentTile => _parentTile;
+        private int _defaultDestination = 0;
+        public int DefaultDestination => _defaultDestination;
         private int _speed;
         public int Speed => _speed;
         private int _attackRange;
@@ -29,12 +31,7 @@ namespace AutoBattler
 
             _ownerId = ownerId;
             _enemyIds = enemyIds;
-            foreach (int id in enemyIds)
-            {
-                Debug.Log($"Garfeel {id}");
-            }
             _parentTile = MapManager.Instance.IdToMapTile[mapTileId];
-
 
             _speed = data.Speed;
             _attackRange = data.AttackRange;
@@ -46,7 +43,10 @@ namespace AutoBattler
         {
             _parentTile = tile;
             if (!Globals.UNITS_ON_MAP.Contains(_unitManager))
+            {
                 Globals.UNITS_ON_MAP.Add(_unitManager);
+            }
+                
             if (_parentTile == null) Debug.LogError($"{_transform.name} has no parent tile.");
         }
     }

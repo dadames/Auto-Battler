@@ -50,6 +50,8 @@ namespace AutoBattler
 
         private void _PathFinding()
         {
+            if (_path == null) return;
+
             _CheckIfReachedDestination();
 
             Vector2 newPosition = Vector2.MoveTowards(transform.position, MapManager.Instance.IdToMapTile[_path[0]].Position, Time.deltaTime * _unit.Speed* Globals.MOVEMENT_SPEED_SCALING);
@@ -101,7 +103,7 @@ namespace AutoBattler
 
         public void Damage(int damage)
         {
-            Debug.Log($"{Unit.OwnerId} taking {damage} damage");
+            //Debug.Log($"{Unit.OwnerId} taking {damage} damage");
         }
 
         public MapTileManager GetTileAtWorldPosition()

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f0dddfe87332b44ba6c41aa4d17d1c5, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: 
+  LevelId: 0
   Players:
   - PlayerData: {fileID: 11400000, guid: d6ef2741f8ebf2840a7a28312431246a, type: 2}
-    TeamNumber: 0
+    TeamId: 0
   - PlayerData: {fileID: 11400000, guid: 3ed02b7b24a9c3d47b4530cbb6b9b34a, type: 2}
-    TeamNumber: 1
+    TeamId: 1

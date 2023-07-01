@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using AutoBattler.AI;
+using UnityEngine;
 
 namespace AutoBattler
 {
@@ -16,9 +14,9 @@ namespace AutoBattler
 
         public override NodeState Evaluate()
         {
-            MapTile destinationTile = (MapTile)GetData("destinationMapTile");
-
-            _unitManager.SetDestination(destinationTile.Id);
+            int destinationTileId = (int)GetData("destinationMapTileId");
+            Debug.Log(destinationTileId);
+            _unitManager.SetDestination(destinationTileId);
 
             _state = NodeState.SUCCESS;
             return _state;

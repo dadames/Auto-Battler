@@ -1,21 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using AutoBattler.AI;
 
 namespace AutoBattler
 {
-    public class TaskAttack : Node
+    public class TaskSetDefaultDestination : Node
     {
         UnitManager _unitManager;
 
-        public TaskAttack(UnitManager unitManager)
+        public TaskSetDefaultDestination(UnitManager unitManager)
         {
             _unitManager = unitManager;
         }
 
         public override NodeState Evaluate()
         {
-            UnitManager targetUnit = (UnitManager)GetData("targetUnit");
-
-            _unitManager.Attack(targetUnit);
+            Root.SetData("destinationMapTileId", _unitManager.Unit.DefaultDestination);
 
             _state = NodeState.SUCCESS;
             return _state;

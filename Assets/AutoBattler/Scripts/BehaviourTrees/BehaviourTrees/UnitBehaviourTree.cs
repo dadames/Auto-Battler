@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using AutoBattler.AI;
 
 namespace AutoBattler
@@ -21,14 +19,14 @@ namespace AutoBattler
             //Prepare Subtrees
             Sequence AttackNearbyEnemy = new(new List<Node> {
                 new CheckEnemyInRange(_unitManager),
-
+                new TaskAttack(_unitManager),
             });
 
-            Sequence FindDestination = new(new List<Node> {
-                new Sequence(new List<Node>
+            Sequence SetDestination = new(new List<Node> {
+                new Selector(new List<Node>
                 {
                     new CheckForEnemies(_unitManager),
-                    new TaskSetDestination(_unitManager),
+                    new TaskSetDefaultDestination(_unitManager),
                 }),
                 new TaskSetDestination(_unitManager),
             });
@@ -38,7 +36,7 @@ namespace AutoBattler
             _root = new Selector(new List<Node>
             {
                 AttackNearbyEnemy,
-                FindDestination,
+                SetDestination,
                 //new TaskMoveToDestination(),
             });
 

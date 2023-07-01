@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using AutoBattler.AI;
+using UnityEngine;
 
 namespace AutoBattler
 {
@@ -16,19 +17,17 @@ namespace AutoBattler
 
         public override NodeState Evaluate()
         {
-            Root.ClearData("destinationEnemy");
+            Root.ClearData("destinationMapTileId");
            
 
             List<UnitManager> enemiesOnMap = TilemapUtilities.FindUnitsOnMapByOwnerId(_unit.EnemyIds);
-            //Find Closest Enemy Unit
-            //Pathfinding check to find enemies on map
-            //Set priority enemy
+            
 
             if (enemiesOnMap.Any())
             {
                 UnitManager destinationEnemy = TilemapUtilities.FindClosestUnitOnMapByOwnerId(_unit.ParentTile,_unit.EnemyIds);
-                Root.SetData("destinationTile", destinationEnemy.Unit.ParentTile);
-                _state = NodeState.RUNNING;
+                Root.SetData("destinationMapTileId", destinationEnemy.Unit.ParentTile.Id);
+                _state = NodeState.SUCCESS;
                 return _state;
             }
 
