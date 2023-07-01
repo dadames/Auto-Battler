@@ -6,23 +6,25 @@ namespace AutoBattler
 {
     public class CheckEnemyInRange : Node
     {
-        UnitManager _unitManager;
+        Unit _unit;
 
         public CheckEnemyInRange(UnitManager manager) : base()
         {
-            _unitManager = manager;
+            _unit = manager.Unit;
         }
-
-
+        
         public override NodeState Evaluate()
         {
-            List<UnitManager> enemiesInRange = new();
+            List<UnitManager> enemiesInRange = TilemapUtilities.FindUnitsInRangeByOwnerId(_unit.ParentTile, _unit.AttackRange, _unit.EnemyIds);
+
+
             //Pathfinding check each tile within range until enemy is found
             //Set closest enemy
 
             if (enemiesInRange.Any())
             {
-                _state = NodeState.RUNNING;
+                Root.SetData("targetUnit", TilemapUtilities.FindClosestUnitByOwnerId(_unit.ParentTile, _unit.AttackRange, _unit.EnemyIds));
+                _state = NodeState.SUCCESS;
                 return _state;
             }
 

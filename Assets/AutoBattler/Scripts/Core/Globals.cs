@@ -7,10 +7,12 @@ namespace AutoBattler
     {
         #region GAME ---------------------------------
 
+        public static LevelData[] LEVEL_DATA;
         public static UnitData[] UNIT_DATA;
         public static float MOVEMENT_SPEED_SCALING = 0.5f;
         public static List<Vector2Int> TILEMAP_STRAIGHT_MOVES = new();
         public static List<Vector2Int> TILEMAP_DIAGONAL_MOVES = new();
+        public static List<UnitManager> UNITS_ON_MAP = new();
 
         #endregion
 
@@ -29,6 +31,7 @@ namespace AutoBattler
 
         #region FOLDERS ---------------------------------
 
+        public static string LEVEL_DATA_FOLDER = "ScriptableObjects/LevelData"; 
         public static string UNIT_DATA_FOLDER = "ScriptableObjects/UnitData";
         public static string MAPTILE_DATA_FOLDER = "ScriptableObjects/MapTileData";
 

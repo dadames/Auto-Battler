@@ -11,7 +11,8 @@ namespace AutoBattler
 
         public void LoadGameData()
         {
-            Globals.UNIT_DATA = Resources.LoadAll<UnitData>(Globals.UNIT_DATA_FOLDER) as UnitData[];
+            Globals.UNIT_DATA = Resources.LoadAll<UnitData>(Globals.UNIT_DATA_FOLDER);
+            Globals.LEVEL_DATA = Resources.LoadAll<LevelData>(Globals.LEVEL_DATA_FOLDER);
 
             //TileMap Directions
             Globals.TILEMAP_STRAIGHT_MOVES.Add(new Vector2Int(0, -1));

@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f858bd26f0ebd44459049c0a5a054655, type: 3}
-  m_Name: 0 - TestUnit
+  m_Script: {fileID: 11500000, guid: 2295a054ac5d5dc4d93c06a93a593d10, type: 3}
+  m_Name: 1 - TestEnemy
   m_EditorClassIdentifier: 
-  UnitId: 0
-  Prefab: {fileID: 235820203357574716, guid: 9f7619f60a3b94848a06ea9e4bae1407, type: 3}
-  Speed: 2
-  AttackRange: 1
+  PlayerId: 1
+  Enemies:
+  - {fileID: 11400000, guid: d6ef2741f8ebf2840a7a28312431246a, type: 2}
+  Allies: []

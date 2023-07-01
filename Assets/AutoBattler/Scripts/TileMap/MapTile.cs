@@ -18,6 +18,8 @@ namespace AutoBattler
         public int Id => _id;
         private bool _isBuildable;
         private bool _isBlocker;
+        public bool IsBlocker => _isBlocker;
+        public bool ContainsUnit { get => _occupyingUnit != null; }
         public bool IsBlocked
         {
             get { return _isBlocker || _occupyingUnit != null; }

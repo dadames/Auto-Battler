@@ -101,7 +101,7 @@ namespace AutoBattler
 
         public void Damage(int damage)
         {
-
+            Debug.Log($"{Unit.OwnerId} taking {damage} damage");
         }
 
         public MapTileManager GetTileAtWorldPosition()

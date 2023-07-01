@@ -33,7 +33,6 @@ namespace AutoBattler
                 {
                     if (next.IsBlocked)
                     {
-                        Debug.Log($"{next.Id} is blocked");
                         continue;
                     }
                     int newCost = costSoFar[current] + graph.Cost(current, next.Id);                    
