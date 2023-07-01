@@ -31,7 +31,7 @@ namespace AutoBattler
 
                 foreach (MapTile next in graph.Neighbours(current))
                 {
-                    if (next.IsBlocked)
+                    if (next.IsBlocked && next != end)
                     {
                         continue;
                     }
@@ -62,7 +62,10 @@ namespace AutoBattler
             {
                 output.Insert(0, path[currentPosition]);
                 currentPosition = path[currentPosition];
-                MapManager.Instance.IdToMapTile[currentPosition].HighlightTile();
+            }
+            if (MapManager.Instance.IdToMapTile[end].IsBlocked)
+            {
+                output.RemoveAt(output.Count - 1);
             }
 
             return output;

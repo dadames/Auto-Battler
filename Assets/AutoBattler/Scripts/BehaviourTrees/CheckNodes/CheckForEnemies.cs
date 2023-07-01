@@ -17,6 +17,7 @@ namespace AutoBattler
 
         public override NodeState Evaluate()
         {
+            Debug.Log($"{_unit.OwnerId} CheckForEnemies");
             Root.ClearData("destinationMapTileId");
            
 

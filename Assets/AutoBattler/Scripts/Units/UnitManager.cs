@@ -9,6 +9,9 @@ namespace AutoBattler
         private Unit _unit;
         public Unit Unit => _unit;
         private Rigidbody2D _rigidBody;
+        [SerializeField] Sprite _normalSprite;
+        [SerializeField] Sprite _debuggingSprite;
+        [SerializeField] SpriteRenderer _renderer;
 
         private bool _initialized = false;
         private List<int> _path;
@@ -49,8 +52,16 @@ namespace AutoBattler
         }
 
         private void _PathFinding()
-        {
-            if (_path == null) return;
+        {          
+            if (_path == null || _path.Count <= 1)
+            {
+                _renderer.sprite = _debuggingSprite;
+                return;
+            }
+            else
+            {
+                _renderer.sprite = _normalSprite;
+            }
 
             _CheckIfReachedDestination();
 
@@ -103,7 +114,7 @@ namespace AutoBattler
 
         public void Damage(int damage)
         {
-            //Debug.Log($"{Unit.OwnerId} taking {damage} damage");
+            Debug.Log($"{Unit.OwnerId} taking {damage} damage");
         }
 
         public MapTileManager GetTileAtWorldPosition()

@@ -79,19 +79,20 @@ namespace AutoBattler
 
         public static List<UnitManager> FindUnitsInRangeByOwnerId(MapTile start, int range, List<int> unitOwnerIds)
         {
-            List<UnitManager> enemiesInRange = FindUnitsInRange(MapManager.Instance.PathfindingGrid, start, range);
-            foreach (UnitManager unitManager in enemiesInRange)
+            List<UnitManager> unitsInRange = FindUnitsInRange(MapManager.Instance.PathfindingGrid, start, range);
+            List<UnitManager> targetUnitsInRange = new();
+            foreach (UnitManager unitManager in unitsInRange)
             {
                 foreach (int id in unitOwnerIds)
                 {
-                    if (id != unitManager.Unit.OwnerId)
+                    if (id == unitManager.Unit.OwnerId)
                     {
-                        enemiesInRange.Remove(unitManager);
+                        targetUnitsInRange.Add(unitManager);
                     }
                 }
             }
 
-            return enemiesInRange;
+            return targetUnitsInRange;
         }
 
         public static List<UnitManager> FindUnitsInRange(IWeightedGraph<MapTile> graph, MapTile start, int range)
@@ -115,7 +116,7 @@ namespace AutoBattler
                     {
                         unitsInRange.Add(next.OccupyingUnit);
                     }
-                    if (CompareDistance(next.GridLocation, start.GridLocation) <= range)
+                    if (CompareDistance(next.GridLocation, start.GridLocation) < range)
                     {
                         frontier.Enqueue(next.Id);
                         reached.Add(next.Id);

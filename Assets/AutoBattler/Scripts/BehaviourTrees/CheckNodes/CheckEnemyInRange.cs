@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoBattler.AI;
+using UnityEngine;
 
 namespace AutoBattler
 {
@@ -15,6 +16,7 @@ namespace AutoBattler
         
         public override NodeState Evaluate()
         {
+            Debug.Log($"{_unit.OwnerId} CheckEnemyInRange");
             Root.ClearData("targetUnit");
 
             List<UnitManager> enemiesInRange = TilemapUtilities.FindUnitsInRangeByOwnerId(_unit.ParentTile, _unit.AttackRange, _unit.EnemyIds);
