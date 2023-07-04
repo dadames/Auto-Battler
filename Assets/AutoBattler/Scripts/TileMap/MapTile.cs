@@ -12,6 +12,8 @@ namespace AutoBattler
         public int Cost => _cost;
         private Vector2Int _gridLocation;
         public Vector2Int GridLocation => _gridLocation;
+        private UnitManager _claimingUnit;
+        public UnitManager ClaimingUnit => _claimingUnit;
         private UnitManager _occupyingUnit;
         public UnitManager OccupyingUnit => _occupyingUnit;
         private int _id;
@@ -40,11 +42,36 @@ namespace AutoBattler
             _mapTileManager.Initialize(this);
         }
 
-        public void MoveUnitToTile(UnitManager unit)
+        public bool MoveUnitToTile(UnitManager unitManager)
         {
             if (_isBlocker) Debug.LogError($"Unit moved to blocker tile {_id}");
-            _occupyingUnit = unit;
-            EventManager.TriggerEvent("UpdatePathfinding");
+
+            if (_occupyingUnit == null)
+            {
+                _occupyingUnit = unitManager;
+                unitManager.Unit.SetParentTile(this);
+                EventManager.TriggerEvent("UpdatePathfinding");
+                return true;
+            }
+            else if (_occupyingUnit == unitManager)
+            {
+                return true;
+            }
+
+            return false;
+            
+        }
+        public bool ClaimTile(UnitManager unit)
+        {
+            if (_isBlocker) Debug.LogError($"Unit moved to blocker tile {_id}");
+
+            if (_claimingUnit == null || _claimingUnit == unit)
+            {
+                _claimingUnit = unit;
+                return true;
+            }
+
+            return false;
         }
 
         public void ClearTile()

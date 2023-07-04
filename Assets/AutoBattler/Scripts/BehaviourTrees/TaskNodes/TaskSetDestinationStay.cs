@@ -16,7 +16,7 @@ namespace AutoBattler
         {
             //Debug.Log($"{_unitManager.Unit.OwnerId} TaskSetDestinationStay");
             int destinationTileId = _unitManager.Unit.ParentTile.Id;
-            Debug.Log(destinationTileId);
+            //Debug.Log(destinationTileId);
             _unitManager.SetDestination(destinationTileId);
 
             _state = NodeState.SUCCESS;

@@ -7,6 +7,8 @@ namespace AutoBattler
     {
         private Transform _transform;
         private UnitManager _unitManager;
+        private int _uid;
+        public int Uid => _uid;
         private int _ownerId;
         public int OwnerId => _ownerId;
 
@@ -22,16 +24,17 @@ namespace AutoBattler
         public List<int> EnemyIds => _enemyIds;
 
 
-        public Unit(UnitData data, int ownerId, List<int> enemyIds, int mapTileId)
+        public Unit(UnitData data, int uid, int ownerId, List<int> enemyIds, int mapTileId)
         {
             GameObject g = GameObject.Instantiate(data.Prefab);
             _transform = g.transform;
-            _transform.name = $"{data.UnitId}";
+            _transform.name = $"{data.UnitTypeId}";
             _unitManager = g.transform.GetComponent<UnitManager>();
+            
 
+            _uid = uid;
             _ownerId = ownerId;
             _enemyIds = enemyIds;
-            //_parentTile = MapManager.Instance.IdToMapTile[mapTileId];
 
             _speed = data.Speed;
             _attackRange = data.AttackRange;
@@ -41,11 +44,18 @@ namespace AutoBattler
 
         public void SetParentTile(MapTile tile)
         {
+            MapTile oldTile = tile;
             _parentTile = tile;
-            if (!Globals.UNITS_ON_MAP.Contains(_unitManager))
+            if (_parentTile != oldTile)
             {
-                Globals.UNITS_ON_MAP.Add(_unitManager);
+                oldTile.ClearTile();
             }
+           
+            if (!UnitCoordinatorManager.Instance.UnitsOnMap.Contains(this))
+            {
+                UnitCoordinatorManager.Instance.UnitsOnMap.Add(this);
+            }
+            
                 
             if (_parentTile == null) Debug.LogError($"{_transform.name} has no parent tile.");
         }

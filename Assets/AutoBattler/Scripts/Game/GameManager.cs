@@ -29,20 +29,16 @@ namespace AutoBattler
             {
                 if (player.PlayerId == 0)
                 {
-                    SpawnUnit(0, player.PlayerId, player.EnemyIds, 10);
+                    UnitCoordinatorManager.Instance.SpawnUnit(0, player.PlayerId, player.EnemyIds, 80);
                 }
                 if (player.PlayerId == 1)
                 {
-                    SpawnUnit(0, player.PlayerId, player.EnemyIds, 110);
+                    UnitCoordinatorManager.Instance.SpawnUnit(0, player.PlayerId, player.EnemyIds, 98);
                 }
             }
         }
 
-        public void SpawnUnit(int unitId, int ownerId, List<int> enemyIds, int mapTileId)
-        {
-            UnitData unitData = Globals.UNIT_DATA.Where((UnitData x) => x.UnitId == unitId).First();
-            Unit unit = new(unitData, ownerId, enemyIds, mapTileId);
-        }
+
 
         private void _LoadLevelData(int levelId)
         {

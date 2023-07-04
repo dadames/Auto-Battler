@@ -19,19 +19,17 @@ namespace AutoBattler
         {
             Debug.Log($"{_unit.OwnerId} CheckForEnemies");
             Root.ClearData("destinationMapTileId");
-           
-
-            List<UnitManager> enemiesOnMap = TilemapUtilities.FindUnitsOnMapByOwnerId(_unit.EnemyIds);
-            
+            List<Unit> enemiesOnMap = TilemapUtilities.FindUnitsOnMapByOwnerId(_unit.EnemyIds);            
 
             if (enemiesOnMap.Any())
             {
-                UnitManager destinationEnemy = TilemapUtilities.FindClosestUnitOnMapByOwnerId(_unit.ParentTile,_unit.EnemyIds);
-                Root.SetData("destinationMapTileId", destinationEnemy.Unit.ParentTile.Id);
+
+                Unit destinationEnemy = TilemapUtilities.FindClosestUnitOnMapByOwnerId(_unit.ParentTile,_unit.EnemyIds);
+                Root.SetData("destinationMapTileId", destinationEnemy.ParentTile.Id);
+
                 _state = NodeState.SUCCESS;
                 return _state;
             }
-
 
             _state = NodeState.FAILURE;
             return _state;

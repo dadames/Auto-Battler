@@ -12,7 +12,6 @@ namespace AutoBattler
         public static float MOVEMENT_SPEED_SCALING = 0.5f;
         public static List<Vector2Int> TILEMAP_STRAIGHT_MOVES = new();
         public static List<Vector2Int> TILEMAP_DIAGONAL_MOVES = new();
-        public static List<UnitManager> UNITS_ON_MAP = new();
 
         #endregion
 

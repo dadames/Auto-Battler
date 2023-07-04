@@ -14,21 +14,21 @@ namespace AutoBattler
 
 
         //Unit Checks
-        public static UnitManager FindClosestUnitOnMapByOwnerId(MapTile start, List<int> unitOwnerIds)
+        public static Unit FindClosestUnitOnMapByOwnerId(MapTile start, List<int> unitOwnerIds)
         {
-            UnitManager closestUnit = null;
+            Unit closestUnit = null;
             int closestUnitDistance = int.MaxValue;
 
-            foreach (UnitManager unitManager in Globals.UNITS_ON_MAP)
+            foreach (Unit unit in UnitCoordinatorManager.Instance.UnitsOnMap)
             {
-                if (closestUnit == null) { closestUnit = unitManager; }
-                int distance = CompareDistance(start.GridLocation, unitManager.Unit.ParentTile.GridLocation);
+                if (closestUnit == null) { closestUnit = unit; }
+                int distance = CompareDistance(start.GridLocation, unit.ParentTile.GridLocation);
 
                 foreach (int id in unitOwnerIds)
                 {
-                    if (id == unitManager.Unit.OwnerId && distance < closestUnitDistance)
+                    if (id == unit.OwnerId && distance < closestUnitDistance)
                     {
-                        closestUnit = unitManager;
+                        closestUnit = unit;
                     }
                 }
             }
@@ -36,17 +36,18 @@ namespace AutoBattler
             return closestUnit;
         }
 
-        public static List<UnitManager> FindUnitsOnMapByOwnerId(List<int> unitOwnerIds)
+        public static List<Unit> FindUnitsOnMapByOwnerId(List<int> unitOwnerIds)
         {
-            List<UnitManager> unitsOnMap = new();
+            List<Unit> unitsOnMap = new();
 
-            foreach (UnitManager unitManager in Globals.UNITS_ON_MAP)
+            foreach (Unit unit in UnitCoordinatorManager.Instance.UnitsOnMap)
             {
+                
                 foreach (int id in unitOwnerIds)
                 {
-                    if (id == unitManager.Unit.OwnerId)
+                    if (id == unit.OwnerId)
                     {
-                        unitsOnMap.Add(unitManager);
+                        unitsOnMap.Add(unit);
                     }
                 }
             }
